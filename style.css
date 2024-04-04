@@ -12,3 +12,9 @@
     max-height: 100px;
     overflow-y: scroll;
 }
+.move-commentary {
+    max-height: 100px;
+    overflow-y: scroll;
+    color: red;
+    font-weight: bold;
+}
