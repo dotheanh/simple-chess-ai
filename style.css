@@ -14,15 +14,19 @@
 }
 .move-commentary {
     position: absolute;
-    max-height: 100px;
+    top: 20%;
+    max-height: 60%;
     overflow-y: scroll;
-    color: red;
+    color: rgb(7, 7, 90);
     font-weight: bold;
+    max-width: 20%;
 }
 .move-suggestion {
     position: absolute;
     right: 20px;
-    max-height: 100px;
+    top: 20%;
+    max-height: 60%;
     color: green;
     font-weight: bold;
+    max-width: 20%;
 }

@@ -237,13 +237,18 @@ function generateCommentaries(gameBeforeMove, uglyMove) {
     // general comment
     let fromPos = prettyMove.from;
     let toPos = prettyMove.to;
-    let side = uglyMove.color === 'w' ? 'White' : 'Black';
+    let isWhite = uglyMove.color === 'w';
+    let side = isWhite ? 'White' : 'Black';
     let piece = getPieceName(uglyMove.piece);
-    let commentaries = ["[" + prettyMove.san + "]"];
+    let moveIndex = gameBeforeMove.get_move_number() * 2 - (isWhite ? 1 : 0);
+    let commentaries = [moveIndex + ". [" + prettyMove.san + "]"];
     commentaries.push(side + " moves " + piece + " from " + fromPos + " to " + toPos);
     
-    if (gameBeforeMove.cell_is_in_attacked(uglyMove.color, uglyMove.from)) {
-        commentaries.push("- Escaping from the threat");
+    let attackers = gameBeforeMove.get_cell_attackers(uglyMove.color, uglyMove.from);
+    if (attackers.length > 0) {
+        console.log("attackers", attackers)
+        let lsStrAttackers = attackers.map((attacker) => getPieceName(attacker.type));
+        commentaries.push("- Avoiding threat from enemy's " + arrayToSentence(lsStrAttackers));
     }
 
     if (uglyMove.flags !== BITS.NORMAL) {
@@ -379,11 +384,12 @@ var renderMoveHistory = function (moves) {
 
 var renderCommentary = function (comments) {
     if (!comments || comments.length === 0) return;
-    var commentaryElement = $('#move-commentary').empty();
-    commentaryElement.empty();
+    var commentaryElement = $('#move-commentary');
+    // commentaryElement.empty();
     for (var i = 0; i < comments.length; i ++) {
         commentaryElement.append('<span>' + comments[i] + '</span><br>')
     }
+    commentaryElement.append('<br>')
     commentaryElement.scrollTop(commentaryElement[0].scrollHeight);
 
 };
@@ -627,4 +633,13 @@ function getPieceName(pieceAbbreviation) {
         default:
             return 'Unknown';
     }
+}
+
+function arrayToSentence(names) {
+    if (names.length === 0) return "";
+    if (names.length === 1) return names[0];
+    
+    // For two or more elements
+    const last = names.pop(); // Remove the last element
+    return names.join(", ") + " and " + last;
 }
