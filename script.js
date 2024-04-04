@@ -267,11 +267,7 @@ function generateCommentaries(gameBeforeMove, uglyMove) {
     }
 
     let gameAfterMove = Object.assign({}, gameBeforeMove);
-    gameAfterMove.move({
-        from: prettyMove.from,
-        to: prettyMove.to,
-        promotion: uglyMove.promotion
-    });
+    gameAfterMove.ugly_move(uglyMove);
 
     if (gameAfterMove.in_checkmate()) {
         commentaries.push("Checkmate!!!");
@@ -286,6 +282,7 @@ function generateCommentaries(gameBeforeMove, uglyMove) {
     // viết hàm check square supported dựa theo attacked
 
     // support other pieces
+    // protect king or queen
     // chuẩn bị ăn unsupported
     // threaten enemy piece
     // chuẩn bị cho các move tiếp theo
@@ -293,7 +290,6 @@ function generateCommentaries(gameBeforeMove, uglyMove) {
     
     if (gameAfterMove.game_over()) {
         commentaries.push("GAME OVER");
-        return;
     }
     
     gameAfterMove.undo(); // althought I have clone the gameBeforeMove object, the method move still
