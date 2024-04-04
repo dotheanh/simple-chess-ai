@@ -214,13 +214,19 @@ var makeBestMove = async function () {
 
 function generateCommentaries(gameBeforeMove, uglyMove) {
     if (uglyMove === null || uglyMove === undefined) return [];
-    console.log("Generating commentaries", uglyMove);
+    let prettyMove = gameBeforeMove.make_pretty(uglyMove);
+    console.log("Generating commentaries", uglyMove, prettyMove);
     // general comment
-    let fromPos = algebraic(uglyMove.from);
-    let toPos = algebraic(uglyMove.to);
+    let fromPos = prettyMove.from;
+    let toPos = prettyMove.to;
     let side = uglyMove.color === 'w' ? 'White' : 'Black';
     let piece = getPieceName(uglyMove.piece);
-    let commentaries = [side + " moves " + piece + " from " + fromPos + " to " + toPos];
+    let commentaries = ["[" + prettyMove.san + "]"];
+    commentaries.push(side + " moves " + piece + " from " + fromPos + " to " + toPos);
+    
+    if (gameBeforeMove.cell_is_in_attacked(uglyMove.color, uglyMove.from)) {
+        commentaries.push("Escaping from the threat");
+    }
 
     if (uglyMove.flags !== BITS.NORMAL) {
         if (uglyMove.flags === BITS.CAPTURE) {
@@ -242,14 +248,33 @@ function generateCommentaries(gameBeforeMove, uglyMove) {
         // BIG_PAWN...
     }
 
-    // chạy ra khỏi vị trí nguy hiểm
-    // check commentaries
-    // checkmate commentaries
+    let gameAfterMove = Object.assign({}, gameBeforeMove);
+    gameAfterMove.move({
+        from: prettyMove.from,
+        to: prettyMove.to,
+        promotion: uglyMove.promotion
+    });
+
+    if (gameAfterMove.in_checkmate()) {
+        commentaries.push("Checkmate!!!");
+    }
+    else if (gameAfterMove.in_check()) {
+        commentaries.push("Check enemy's King!");
+    }
+    if (gameAfterMove.in_stalemate()) {
+        commentaries.push("The game has been stalemate...");
+    }
+
+    // viết hàm check square supported dựa theo attacked
+
     // support other pieces
     // chuẩn bị ăn unsupported
-    // threatened
+    // threaten enemy piece
     // chuẩn bị cho các move tiếp theo
 
+    
+    gameAfterMove.undo(); // althought I have clone the gameBeforeMove object, the method move still
+    // effects the original object, so we need to revert it here
     return commentaries;
 };
 

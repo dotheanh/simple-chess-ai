@@ -13,6 +13,7 @@
     overflow-y: scroll;
 }
 .move-commentary {
+    position: absolute;
     max-height: 100px;
     overflow-y: scroll;
     color: red;
