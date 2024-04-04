@@ -204,12 +204,30 @@ var makeBestMove = async function () {
     let uglyMove = convertToUglyMove(bestMove);
     let commentaries = generateCommentaries(game, uglyMove);
     renderCommentary(commentaries);
-    let pretty_move = game.ugly_move(uglyMove);
+    game.ugly_move(uglyMove);
     board.position(game.fen());
     renderMoveHistory(game.history());
+
     if (game.game_over()) {
-        alert('Game over');
+        return;
     }
+    
+    let sugestion = await generateSuggestion(game);
+    renderSuggestion(sugestion);
+};
+
+async function generateSuggestion(game) {
+    var bestMove = await getBestMoveFromStockfish(game);
+
+    let uglyMove = convertToUglyMove(bestMove);
+    let suggestion = generateCommentaries(game, uglyMove);
+
+    // Normalization Commentaries into suggestions
+    suggestion.shift();
+    suggestion.forEach((comment, index) => suggestion[index] = comment.replace("White moves", "You should move"));
+
+
+    return suggestion;
 };
 
 function generateCommentaries(gameBeforeMove, uglyMove) {
@@ -225,15 +243,15 @@ function generateCommentaries(gameBeforeMove, uglyMove) {
     commentaries.push(side + " moves " + piece + " from " + fromPos + " to " + toPos);
     
     if (gameBeforeMove.cell_is_in_attacked(uglyMove.color, uglyMove.from)) {
-        commentaries.push("Escaping from the threat");
+        commentaries.push("- Escaping from the threat");
     }
 
     if (uglyMove.flags !== BITS.NORMAL) {
         if (uglyMove.flags === BITS.CAPTURE) {
-            commentaries.push("Capture enemy's " + getPieceName(gameBeforeMove.get(toPos).type));
+            commentaries.push("- Capture enemy's " + getPieceName(gameBeforeMove.get(toPos).type));
         }
         else if (uglyMove.flags === BITS.EP_CAPTURE) {
-            commentaries.push("En passant Capture enemy's Pawn");
+            commentaries.push("- En passant Capture enemy's Pawn");
         }
         else if (uglyMove.flags === BITS.PROMOTION) {
             commentaries.push("Promoted the Pawn into a " + getPieceName(uglyMove.promotion));
@@ -259,7 +277,7 @@ function generateCommentaries(gameBeforeMove, uglyMove) {
         commentaries.push("Checkmate!!!");
     }
     else if (gameAfterMove.in_check()) {
-        commentaries.push("Check enemy's King!");
+        commentaries.push("- Check enemy's King!");
     }
     if (gameAfterMove.in_stalemate()) {
         commentaries.push("The game has been stalemate...");
@@ -273,8 +291,14 @@ function generateCommentaries(gameBeforeMove, uglyMove) {
     // chuẩn bị cho các move tiếp theo
 
     
+    if (gameAfterMove.game_over()) {
+        commentaries.push("GAME OVER");
+        return;
+    }
+    
     gameAfterMove.undo(); // althought I have clone the gameBeforeMove object, the method move still
     // effects the original object, so we need to revert it here
+
     return commentaries;
 };
 
@@ -358,13 +382,24 @@ var renderMoveHistory = function (moves) {
 };
 
 var renderCommentary = function (comments) {
-    if (comments.length === 0) return;
+    if (!comments || comments.length === 0) return;
     var commentaryElement = $('#move-commentary').empty();
     commentaryElement.empty();
     for (var i = 0; i < comments.length; i ++) {
         commentaryElement.append('<span>' + comments[i] + '</span><br>')
     }
     commentaryElement.scrollTop(commentaryElement[0].scrollHeight);
+
+};
+
+var renderSuggestion = function (comments) {
+    if (!comments || comments.length === 0) return;
+    var suggestionElement = $('#move-suggestion').empty();
+    suggestionElement.empty();
+    for (var i = 0; i < comments.length; i ++) {
+        suggestionElement.append('<span>' + comments[i] + '</span><br>')
+    }
+    suggestionElement.scrollTop(suggestionElement[0].scrollHeight);
 
 };
 
@@ -506,7 +541,7 @@ function convertToUglyMove(stockfish_move) {
     /////////////////////////////////////////////////
     // replace the temp move with the valid generated move by chess.js
     let allMovesAtPos = game.ugly_moves({legal: true, square: strFromPos});
-    let generatedMove = allMovesAtPos.find(move => move.from === from && move.to === to && move.piece === piece);
+    let generatedMove = allMovesAtPos.find(move => move.from === from && move.to === to && move.piece.toUpperCase() === piece.toUpperCase());
     /////////////////////////////////////////////////
 
     return generatedMove;
