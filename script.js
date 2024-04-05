@@ -537,13 +537,15 @@ function convertToUglyMove(stockfish_move) {
 
     let strFromPos = bestMove.substring(0, 2);
     let from = pos2Index(strFromPos);
-    let to = pos2Index(bestMove.substring(bestMove.length - 2));
+    let to = pos2Index(bestMove.substring(2, 4));
+    let promotion = bestMove.substring(4, 5);
     let piece = getPieceAtCellIndex(game.fen(), convertPosition2CellIndex(strFromPos));
 
     /////////////////////////////////////////////////
     // replace the temp move with the valid generated move by chess.js
     let allMovesAtPos = game.ugly_moves({legal: true, square: strFromPos});
-    let generatedMove = allMovesAtPos.find(move => move.from === from && move.to === to && move.piece.toUpperCase() === piece.toUpperCase());
+    let generatedMove = allMovesAtPos.find(move => move.from === from && move.to === to && move.piece.toUpperCase() === piece.toUpperCase()
+    && (!promotion || promotion.toLowerCase() === move.promotion));
     /////////////////////////////////////////////////
 
     return generatedMove;
