@@ -1,6 +1,14 @@
 var board,
     game = new Chess();
 
+const isUseAI = $('#checkbox-ai').prop('checked');
+if (isUseAI) {
+    window.setTimeout(async () => {
+        let sugestion = await generateSuggestion(game);
+        renderSuggestion(sugestion);
+    }, 250);
+}
+
 /*The "AI" part starts here */
 
 var minimaxRoot =function(depth, game, isMaximisingPlayer) {
