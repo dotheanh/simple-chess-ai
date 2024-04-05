@@ -256,6 +256,7 @@ function generateCommentaries(gameBeforeMove, uglyMove) {
     if (attackers.length > 0) {
         console.log("attackers", attackers)
         let lsStrAttackers = attackers.map((attacker) => getPieceName(attacker.type));
+        lsStrAttackers = [...new Set(lsStrAttackers)]; // unique attackers
         commentaries.push("- Avoiding threat from enemy's " + arrayToSentence(lsStrAttackers));
     }
 
