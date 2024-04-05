@@ -204,7 +204,7 @@ var onDragStart = function (source, piece, position, orientation) {
 
 
 var makeBestMove = async function () {
-    var bestMove = await getBestMoveFromStockfish(game); // Wait for the best move asynchronously
+    var bestMove = (await getBestMoveFromStockfish(game)).bestmove; // Wait for the best move asynchronously
 
     let uglyMove = convertToUglyMove(bestMove);
     let commentaries = generateCommentaries(game, uglyMove);
@@ -222,14 +222,16 @@ var makeBestMove = async function () {
 };
 
 async function generateSuggestion(game) {
-    var bestMove = await getBestMoveFromStockfish(game);
+    var suggestionStockfish = await getBestMoveFromStockfish(game);
 
-    let uglyMove = convertToUglyMove(bestMove);
+    let uglyMove = convertToUglyMove(suggestionStockfish.bestmove);
     let suggestion = generateCommentaries(game, uglyMove);
 
     // Normalization Commentaries into suggestions
     suggestion.shift();
     suggestion.forEach((comment, index) => suggestion[index] = comment.replace("White moves", "You should move"));
+    suggestion.push("");
+    suggestion.push("Continuation: " + suggestionStockfish.continuation);
 
 
     return suggestion;
@@ -293,13 +295,11 @@ function generateCommentaries(gameBeforeMove, uglyMove) {
         commentaries.push("The game has been stalemate...");
     }
 
-    // viết hàm check square supported dựa theo attacked
-
     // support other pieces
     // protect king or queen
-    // chuẩn bị ăn unsupported
+    // prepare to capture unsupported enemy pieces
     // threaten enemy piece
-    // chuẩn bị cho các move tiếp theo
+    // prepare for the moves in continuation from stockfish
 
     
     if (gameAfterMove.game_over()) {
@@ -362,8 +362,7 @@ var getBestMoveFromStockfish = async function (game) {
         const data = await response.json();
         
         positionCount = 0;
-        let bestMove = data.bestmove;
-        console.log('Best Move:', bestMove);
+        console.log('Best Move:', data);
         let d2 = new Date().getTime();
         let moveTime = (d2 - d);
         let positionsPerS = ( positionCount * 1000 / moveTime);
@@ -371,7 +370,7 @@ var getBestMoveFromStockfish = async function (game) {
         $('#position-count').text(positionCount);
         $('#time').text(moveTime/1000 + 's');
         $('#positions-per-s').text(positionsPerS);
-        return bestMove;
+        return data;
     } catch (error) {
         // Handle errors
         console.error('There was a problem with the fetch operation:', error);
