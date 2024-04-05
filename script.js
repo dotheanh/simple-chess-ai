@@ -6,8 +6,23 @@ if (isUseAI) {
     window.setTimeout(async () => {
         let sugestion = await generateSuggestion(game);
         renderSuggestion(sugestion);
-    }, 250);
+    }, 200);
 }
+
+$(document).ready(function() {
+    $('#checkbox-cvc').change(function() {
+        if ($(this).is(':checked')) {
+            $('#checkbox-ai').prop('checked', true);
+            $('#checkbox-ai').prop('disabled', true);
+
+            window.setTimeout(async () => {
+                await makeBestMove();
+            }, 200);
+        } else {
+            $('#checkbox-ai').prop('disabled', false);
+        }
+    });
+});
 
 /*The "AI" part starts here */
 
@@ -193,6 +208,13 @@ var onDragStart = function (source, piece, position, orientation) {
     }
     
     const isUseAI = $('#checkbox-ai').prop('checked');
+    const isComVSCom = $('#checkbox-cvc').prop('checked');
+    
+    // if using ComVSCom, block all drag and drop events for both color
+    if (isComVSCom && ((piece.search(/^w/) !== -1) || (piece.search(/^b/) !== -1))) {
+        return false;
+    }
+
     // if using AI, block moving black pieces
     if (isUseAI && (piece.search(/^b/) !== -1)) {
         return false;
@@ -227,6 +249,13 @@ var makeBestMove = async function () {
     
     let sugestion = await generateSuggestion(game);
     renderSuggestion(sugestion);
+
+    const isComVSCom = $('#checkbox-cvc').prop('checked');
+    if (isComVSCom) {
+        window.setTimeout(async () => {
+            await makeBestMove();
+        }, 200);
+    }
 };
 
 async function generateSuggestion(game) {
@@ -492,7 +521,7 @@ var onDrop = function (source, target) {
     if (isUseAI) {
         window.setTimeout(async () => {
             await makeBestMove();
-        }, 250);
+        }, 200);
     }
 };
 
