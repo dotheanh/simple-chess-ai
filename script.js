@@ -249,6 +249,7 @@ function generateCommentaries(gameBeforeMove, uglyMove) {
     let commentaries = [moveIndex + ". [" + prettyMove.san + "]"];
     commentaries.push(side + " moves " + piece + " from " + fromPos + " to " + toPos);
     
+    // AVOID ATTACK
     let attackers = gameBeforeMove.get_cell_attackers(uglyMove.color, uglyMove.from);
     if (attackers.length > 0) {
         console.log("attackers", attackers)
@@ -256,22 +257,25 @@ function generateCommentaries(gameBeforeMove, uglyMove) {
         commentaries.push("- Avoiding threat from enemy's " + arrayToSentence(lsStrAttackers));
     }
 
-    if (uglyMove.flags !== BITS.NORMAL) {
-        if (uglyMove.flags === BITS.CAPTURE) {
-            commentaries.push("- Capture enemy's " + getPieceName(gameBeforeMove.get(toPos).type));
-        }
-        else if (uglyMove.flags === BITS.EP_CAPTURE) {
-            commentaries.push("- En passant Capture enemy's Pawn");
-        }
-        else if (uglyMove.flags === BITS.PROMOTION) {
-            commentaries.push("Promoted the Pawn into a " + getPieceName(uglyMove.promotion));
-        }
-        else if (uglyMove.flags === BITS.KSIDE_CASTLE) {
-            commentaries.push("It is King side castle!");
-        }
-        else if (uglyMove.flags === BITS.QSIDE_CASTLE) {
-            commentaries.push("It is Queen side castle!");
-        }
+    if (prettyMove.flags !== FLAGS.NORMAL) {
+        let flags = prettyMove.flags.split("");
+        flags.forEach(flag => {
+            if (flag === FLAGS.CAPTURE) {
+                commentaries.push("- Capture enemy's " + getPieceName(gameBeforeMove.get(toPos).type));
+            }
+            else if (flag === FLAGS.EP_CAPTURE) {
+                commentaries.push("- En passant Capture enemy's Pawn");
+            }
+            else if (flag === FLAGS.PROMOTION) {
+                commentaries.push("- Promoted the Pawn into a " + getPieceName(uglyMove.promotion));
+            }
+            else if (flag === FLAGS.KSIDE_CASTLE) {
+                commentaries.push("- King side castle");
+            }
+            else if (flag === FLAGS.QSIDE_CASTLE) {
+                commentaries.push("- Queen side castle");
+            }
+        });
 
         // BIG_PAWN...
     }
@@ -528,14 +532,14 @@ board = ChessBoard('board', cfg);
  * UTILITY FUNCTIONS
  ****************************************************************************/
 
-let BITS = {
-    NORMAL: 1,
-    CAPTURE: 2,
-    BIG_PAWN: 4,
-    EP_CAPTURE: 8,
-    PROMOTION: 16,
-    KSIDE_CASTLE: 32,
-    QSIDE_CASTLE: 64
+let FLAGS = {
+    NORMAL: 'n',
+    CAPTURE: 'c',
+    BIG_PAWN: 'b',
+    EP_CAPTURE: 'e', // en passant
+    PROMOTION: 'p',
+    KSIDE_CASTLE: 'k',
+    QSIDE_CASTLE: 'q'
 };
 
 function rank(i) {
