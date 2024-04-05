@@ -14,24 +14,38 @@
     </div>
     <div id="board" class="board"></div>
     <div class="info">
+        <br>
+        <button id="btn-restart">Restart Board</button>
+        <button id="btn-flip">Flip Board</button>
+        <br>
+        <br>
+        <button id="btn-export-fen">Export Fen</button>
+        <input type="text" id="fen-input" placeholder="Fen string">
+        <button id="btn-import-fen">Import From Fen</button>
+        <br>
+        <br>
+        <input type="checkbox" id="checkbox-ai" value="isUseAI" checked>
+        <label for="checkbox-ai">Use AI (Stockfish Online)</label>
+        <br>
+
         Search depth:
         <select id="search-depth">
+            <option value="1">1</option>
             <option value="5">5</option>
-            <option value="7">7</option>
-            <option value="9" selected>9</option>
+            <option value="8" selected>8</option>
             <option value="12">12</option>
             <option value="15">15</option>
         </select>
 
         <br>
-        <span>Positions evaluated: <span id="position-count"></span></span>
-        <br>
         <span>Time: <span id="time"></span></span>
         <br>
-        <span>Positions/s: <span id="positions-per-s"></span> </span>
+        <span style="display: none;">Positions evaluated: <span id="position-count"></span></span>
+        <br>
+        <span style="display: none;">Positions/s: <span id="positions-per-s"></span> </span>
         <br>
         <br>
-        <div id="move-history" class="move-history">
+        <div style="display: none;" id="move-history" class="move-history">
         </div>
     </div>
     <script src="lib/jquery/jquery-3.2.1.min.js"></script>

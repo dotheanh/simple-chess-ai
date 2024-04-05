@@ -385,7 +385,6 @@ var renderMoveHistory = function (moves) {
 var renderCommentary = function (comments) {
     if (!comments || comments.length === 0) return;
     var commentaryElement = $('#move-commentary');
-    // commentaryElement.empty();
     for (var i = 0; i < comments.length; i ++) {
         commentaryElement.append('<span>' + comments[i] + '</span><br>')
     }
@@ -436,9 +435,13 @@ var onDrop = function (source, target) {
     }
 
     renderMoveHistory(game.history());
-    window.setTimeout(async () => {
-        await makeBestMove();
-    }, 250);
+    
+    const isUseAI = $('#checkbox-ai').prop('checked');
+    if (isUseAI) {
+        window.setTimeout(async () => {
+            await makeBestMove();
+        }, 250);
+    }
 };
 
 var onSnapEnd = function () {
@@ -478,6 +481,32 @@ var greySquare = function(square) {
 
     squareEl.css('background', background);
 };
+
+$('#btn-restart').click(() => {
+    board.start();
+    game.reset();
+    $('#move-commentary').empty();
+    $('#move-suggestion').empty();
+});
+
+$('#btn-export-fen').click(() => {
+    $('#fen-input').val(game.fen());
+});
+
+$('#btn-import-fen').click(() => {
+    let strFen = $('#fen-input').val();
+    if (strFen !== '') {
+        game.load(strFen);
+        board.position(game.fen());
+    } else {
+        alert('Fen is empty');
+    }
+});
+
+$('#btn-flip').click(() => {
+    board.flip();
+});
+
 
 var cfg = {
     draggable: true,

@@ -30,3 +30,7 @@
     font-weight: bold;
     max-width: 20%;
 }
+
+#fen-input {
+    width: 10rem;
+}
