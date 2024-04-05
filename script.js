@@ -180,8 +180,13 @@ var getPieceValue = function (piece, x, y) {
 /* board visualization and games state handling */
 
 var onDragStart = function (source, piece, position, orientation) {
-    if (game.in_checkmate() === true || game.in_draw() === true ||
-        piece.search(/^b/) !== -1) {
+    if (game.in_checkmate() === true || game.in_draw() === true) {
+        return false;
+    }
+    
+    const isUseAI = $('#checkbox-ai').prop('checked');
+    // if using AI, block moving black pieces
+    if (isUseAI && (piece.search(/^b/) !== -1)) {
         return false;
     }
 };
@@ -435,7 +440,7 @@ var onDrop = function (source, target) {
     }
 
     renderMoveHistory(game.history());
-    
+
     const isUseAI = $('#checkbox-ai').prop('checked');
     if (isUseAI) {
         window.setTimeout(async () => {
