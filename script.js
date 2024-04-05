@@ -266,7 +266,7 @@ async function generateSuggestion(game) {
 
     // Normalization Commentaries into suggestions
     suggestion.shift();
-    suggestion.forEach((comment, index) => suggestion[index] = comment.replace("White moves", "You should move"));
+    suggestion.forEach((comment, index) => suggestion[index] = comment.replace("moves", "should move"));
     suggestion.push("");
     suggestion.push("Continuation: " + suggestionStockfish.continuation);
 
@@ -322,16 +322,6 @@ function generateCommentaries(gameBeforeMove, uglyMove) {
     let gameAfterMove = Object.assign({}, gameBeforeMove);
     gameAfterMove.ugly_move(uglyMove);
 
-    if (gameAfterMove.in_checkmate()) {
-        commentaries.push("Checkmate!!!");
-    }
-    else if (gameAfterMove.in_check()) {
-        commentaries.push("- Check enemy's King!");
-    }
-    if (gameAfterMove.in_stalemate()) {
-        commentaries.push("The game has been stalemate...");
-    }
-
     // get all the moves that this piece will be available to attack after this move
     let potentialMoves = gameAfterMove.get_potential_moves(uglyMove.to);
     let lsAttacking = [];
@@ -374,6 +364,17 @@ function generateCommentaries(gameBeforeMove, uglyMove) {
     // prepare to capture unsupported enemy pieces
     // prepare for the moves in continuation from stockfish
 
+
+    // GAME OVER
+    if (gameAfterMove.in_checkmate()) {
+        commentaries.push("Checkmate!!!");
+    }
+    // else if (gameAfterMove.in_check()) {
+    //     commentaries.push("- Check enemy's King!");
+    // }
+    if (gameAfterMove.in_stalemate()) {
+        commentaries.push("The game has been stalemate...");
+    }
     
     if (gameAfterMove.game_over()) {
         commentaries.push("GAME OVER");
