@@ -254,7 +254,6 @@ function generateCommentaries(gameBeforeMove, uglyMove) {
     // AVOID ATTACK
     let attackers = gameBeforeMove.get_cell_attackers(uglyMove.color, uglyMove.from);
     if (attackers.length > 0) {
-        console.log("attackers", attackers)
         let lsStrAttackers = attackers.map((attacker) => getPieceName(attacker.type));
         lsStrAttackers = [...new Set(lsStrAttackers)]; // unique attackers
         commentaries.push("- Avoiding threat from enemy's " + arrayToSentence(lsStrAttackers));
@@ -296,10 +295,46 @@ function generateCommentaries(gameBeforeMove, uglyMove) {
         commentaries.push("The game has been stalemate...");
     }
 
-    // support other pieces
+    // get all the moves that this piece will be available to attack after this move
+    let potentialMoves = gameAfterMove.get_potential_moves(uglyMove.to);
+    let lsAttacking = [];
+    let lsSupporting = [];
+
+    // convert flags from BITS to FLAGS, and then classify the move 
+    potentialMoves.forEach((move) => {
+        let flags = '';
+        for (var flag in BITS) {
+            if (BITS[flag] & move.flags) {
+                flags += FLAGS[flag];
+            }
+        }
+        move.flags = flags;
+        move.from = algebraic(move.from);
+        move.to = algebraic(move.to);
+
+        if (flags.includes(FLAGS.CAPTURE)) {
+            let target = getPieceName(gameAfterMove.get(move.to).type) + " (" + move.to + ")";
+            lsAttacking.push(target);
+        }
+        if (flags.includes(FLAGS.SUPPORT)) {
+            let target = getPieceName(gameAfterMove.get(move.to).type) + " (" + move.to + ")";
+            lsSupporting.push(target);
+        }
+    });
+    console.log("potentialMoves", potentialMoves);
+
+    // ATTACKING / THREATING
+    if (lsAttacking.length > 0) {
+        commentaries.push("- Threating enemy's " + arrayToSentence(lsAttacking));
+    }
+
+    // SUPPORTING
+    if (lsSupporting.length > 0) {
+        commentaries.push("- Support allied " + arrayToSentence(lsSupporting));
+    }
+
     // protect king or queen
     // prepare to capture unsupported enemy pieces
-    // threaten enemy piece
     // prepare for the moves in continuation from stockfish
 
     
@@ -539,7 +574,19 @@ let FLAGS = {
     EP_CAPTURE: 'e', // en passant
     PROMOTION: 'p',
     KSIDE_CASTLE: 'k',
-    QSIDE_CASTLE: 'q'
+    QSIDE_CASTLE: 'q',
+    SUPPORT: 's',
+};
+
+let BITS = {
+    NORMAL: 1,
+    CAPTURE: 2,
+    BIG_PAWN: 4,
+    EP_CAPTURE: 8,
+    PROMOTION: 16,
+    KSIDE_CASTLE: 32,
+    QSIDE_CASTLE: 64,
+    SUPPORT: 128,
 };
 
 function rank(i) {
