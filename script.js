@@ -316,7 +316,7 @@ function generateCommentaries(gameBeforeMove, uglyMove) {
             }
         });
 
-        // BIG_PAWN...
+        // TODO: BIG_PAWN...
     }
 
     let gameAfterMove = Object.assign({}, gameBeforeMove);
@@ -360,18 +360,17 @@ function generateCommentaries(gameBeforeMove, uglyMove) {
         commentaries.push("- Support allied " + arrayToSentence(lsSupporting));
     }
 
-    // protect king or queen
-    // prepare to capture unsupported enemy pieces
-    // prepare for the moves in continuation from stockfish
+    // ALLOW/PREPARE FOR NEW MOVES
+
+    // TODO: protect king or queen
+    // TODO: prepare to capture unsupported enemy pieces
+    // TODO: prepare for the moves in continuation from stockfish
 
 
     // GAME OVER
     if (gameAfterMove.in_checkmate()) {
         commentaries.push("Checkmate!!!");
     }
-    // else if (gameAfterMove.in_check()) {
-    //     commentaries.push("- Check enemy's King!");
-    // }
     if (gameAfterMove.in_stalemate()) {
         commentaries.push("The game has been stalemate...");
     }
