@@ -277,6 +277,8 @@ async function generateSuggestion(game) {
 function generateCommentaries(gameBeforeMove, uglyMove) {
     if (uglyMove === null || uglyMove === undefined) return [];
     let prettyMove = gameBeforeMove.make_pretty(uglyMove);
+    const lsAllOurAvaiableMovesBefore = gameBeforeMove.ugly_moves();
+
     console.log("Generating commentaries", uglyMove, prettyMove);
     // general comment
     let fromPos = prettyMove.from;
@@ -322,6 +324,8 @@ function generateCommentaries(gameBeforeMove, uglyMove) {
     let gameAfterMove = Object.assign({}, gameBeforeMove);
     gameAfterMove.ugly_move(uglyMove);
 
+    const lsAllOurAvaiableMovesAfter = gameAfterMove.enemy_ugly_moves();
+
     // get all the moves that this piece will be available to attack or support after this move
     let potentialMoves = gameAfterMove.get_potential_moves(uglyMove.to);
     let lsAttacking = [];
@@ -353,6 +357,31 @@ function generateCommentaries(gameBeforeMove, uglyMove) {
     }
 
     // ALLOW/PREPARE FOR NEW MOVES
+    const lsStrNewGoodAvailableMoves = [];
+    for (let i = 0; i < lsAllOurAvaiableMovesAfter.length; i++) {
+        let move = lsAllOurAvaiableMovesAfter[i];
+        // TODO: exclude all the moves starting from the end pos of current move, because we have talked about them above in the "potentialMoves" section
+        if (move.from === uglyMove.to) {
+            continue;
+        }
+
+        let isNewMove = !lsAllOurAvaiableMovesBefore.some(function(obj) {
+            return compareObjects(obj, move);
+        });
+        if (isNewMove) {
+            let prettyMove = gameBeforeMove.make_pretty(move, false);
+            if (prettyMove.flags.includes(FLAGS.CAPTURE)
+            // || prettyMove.flags.includes(FLAGS.EP_CAPTURE) ////////////////////////////// TODO: TA (why EP_CAPTURE moves are here, when they are not available)
+            || prettyMove.flags.includes(FLAGS.PROMOTION)
+            || prettyMove.flags.includes(FLAGS.KSIDE_CASTLE)
+            || prettyMove.flags.includes(FLAGS.QSIDE_CASTLE)) {
+                lsStrNewGoodAvailableMoves.push(prettyMove.from + prettyMove.to);
+            }
+        }
+    }
+    if (lsStrNewGoodAvailableMoves.length > 0) {
+        commentaries.push("- Allow us to do " + arrayToSentence(lsStrNewGoodAvailableMoves, "or"));
+    }
 
     // TODO: protect king or queen
     // TODO: prepare to capture unsupported enemy pieces
@@ -693,6 +722,12 @@ function convertPosition2CellIndex(position) {
     return index;
 }
 
+function compareObjects(obj1, obj2) {
+    var obj1String = JSON.stringify(obj1);
+    var obj2String = JSON.stringify(obj2);
+    return obj1String === obj2String;
+}
+
 function getPieceAtCellIndex(fen, cellIndex) {
 
     // Split the FEN string into its components
@@ -751,11 +786,12 @@ function getPieceName(pieceAbbreviation) {
     }
 }
 
-function arrayToSentence(names) {
+function arrayToSentence(names, linkingWord = "and") {
+    names = [...new Set(names)]; // unique names
     if (names.length === 0) return "";
     if (names.length === 1) return names[0];
     
     // For two or more elements
     const last = names.pop(); // Remove the last element
-    return names.join(", ") + " and " + last;
+    return names.join(", ") + " " + linkingWord + " " + last;
 }
