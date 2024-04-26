@@ -322,29 +322,21 @@ function generateCommentaries(gameBeforeMove, uglyMove) {
     let gameAfterMove = Object.assign({}, gameBeforeMove);
     gameAfterMove.ugly_move(uglyMove);
 
-    // get all the moves that this piece will be available to attack after this move
+    // get all the moves that this piece will be available to attack or support after this move
     let potentialMoves = gameAfterMove.get_potential_moves(uglyMove.to);
     let lsAttacking = [];
     let lsSupporting = [];
 
     // convert flags from BITS to FLAGS, and then classify the move 
     potentialMoves.forEach((move) => {
-        let flags = '';
-        for (var flag in BITS) {
-            if (BITS[flag] & move.flags) {
-                flags += FLAGS[flag];
-            }
-        }
-        move.flags = flags;
-        move.from = algebraic(move.from);
-        move.to = algebraic(move.to);
+        const prettyMove = gameAfterMove.make_pretty(move, false);
 
-        if (flags.includes(FLAGS.CAPTURE)) {
-            let target = getPieceName(gameAfterMove.get(move.to).type) + " (" + move.to + ")";
+        if (prettyMove.flags.includes(FLAGS.CAPTURE)) {
+            let target = getPieceName(gameAfterMove.get(prettyMove.to).type) + " (" + prettyMove.to + ")";
             lsAttacking.push(target);
         }
-        if (flags.includes(FLAGS.SUPPORT)) {
-            let target = getPieceName(gameAfterMove.get(move.to).type) + " (" + move.to + ")";
+        if (prettyMove.flags.includes(FLAGS.SUPPORT)) {
+            let target = getPieceName(gameAfterMove.get(prettyMove.to).type) + " (" + prettyMove.to + ")";
             lsSupporting.push(target);
         }
     });
