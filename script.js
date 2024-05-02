@@ -286,7 +286,7 @@ function generateCommentaries(gameBeforeMove, uglyMove) {
     let toPos = prettyMove.to;
     let isWhite = uglyMove.color === 'w';
     let side = isWhite ? localize('White') : localize('Black');
-    let piece = getPieceName(uglyMove.piece);
+    let piece = getPieceName(uglyMove.piece, uglyMove.color);
     let moveIndex = gameBeforeMove.get_move_number() * 2 - (isWhite ? 1 : 0);
     let commentaries = [moveIndex + ". [" + prettyMove.san + "]"];
     commentaries.push(`${side} ${localize('moves')} ${piece} ${localize('from')} ${fromPos} ${localize('to')} ${toPos}`);
@@ -294,7 +294,7 @@ function generateCommentaries(gameBeforeMove, uglyMove) {
     // AVOID ATTACK
     let attackers = gameBeforeMove.get_cell_attackers(uglyMove.color, uglyMove.from);
     if (attackers.length > 0) {
-        let lsStrAttackers = attackers.map((attacker) => getPieceName(attacker.type));
+        let lsStrAttackers = attackers.map((attacker) => getPieceName(attacker.type, attacker.color));
         lsStrAttackers = [...new Set(lsStrAttackers)]; // unique attackers
         commentaries.push(`- ${localize('Avoiding threat from enemy\'s')} ${arrayToSentence(lsStrAttackers)}`);
     }
@@ -303,13 +303,14 @@ function generateCommentaries(gameBeforeMove, uglyMove) {
         let flags = prettyMove.flags.split("");
         flags.forEach(flag => {
             if (flag === FLAGS.CAPTURE) {
-                commentaries.push(`- ${localize('Capture enemy\'s')} ${getPieceName(gameBeforeMove.get(toPos).type)}`);
+                let piece = gameBeforeMove.get(toPos);
+                commentaries.push(`- ${localize('Capture enemy\'s')} ${getPieceName(piece.type, piece.color)}`);
             }
             else if (flag === FLAGS.EP_CAPTURE) {
                 commentaries.push(`- ${localize('En passant Capture enemy\'s')} ${localize('Pawn')}`);
             }
             else if (flag === FLAGS.PROMOTION) {
-                commentaries.push(`- ${localize('Promoted the Pawn into a')} ${getPieceName(uglyMove.promotion)}`);
+                commentaries.push(`- ${localize('Promoted the Pawn into a')} ${getPieceName(uglyMove.promotion, uglyMove.color)}`);
             }
             else if (flag === FLAGS.KSIDE_CASTLE) {
                 commentaries.push(`- ${localize('King side castle')}`);
@@ -335,11 +336,13 @@ function generateCommentaries(gameBeforeMove, uglyMove) {
         const prettyMove = gameAfterMove.make_pretty(move, false);
 
         if (prettyMove.flags.includes(FLAGS.CAPTURE)) {
-            let target = getPieceName(gameAfterMove.get(prettyMove.to).type) + " (" + prettyMove.to + ")";
+            let piece = gameAfterMove.get(prettyMove.to);
+            let target = getPieceName(piece.type, piece.color) + " (" + prettyMove.to + ")";
             lsAttacking.push(target);
         }
         if (prettyMove.flags.includes(FLAGS.SUPPORT)) {
-            let target = getPieceName(gameAfterMove.get(prettyMove.to).type) + " (" + prettyMove.to + ")";
+            let piece = gameAfterMove.get(prettyMove.to);
+            let target = getPieceName(piece.type, piece.color) + " (" + prettyMove.to + ")";
             lsSupporting.push(target);
         }
     });
@@ -832,7 +835,27 @@ function convertToFenWithDashes(fen) {
     return convertedBoardLayout;
 }
 
-function getPieceName(pieceAbbreviation) {
+function getPieceName(pieceAbbreviation, color) {
+    if (color !== undefined) {
+        let isWhite = color === 'w';
+        switch(pieceAbbreviation.toUpperCase()) {
+            case 'K':
+                return `${localize('King')} <span class="chess-icon"> ${isWhite ? '♔' : '♚'}</span>`;
+            case 'Q':
+                return `${localize('Queen')} <span class="chess-icon"> ${isWhite ? '♕' : '♛'}</span>`;
+            case 'R':
+                return `${localize('Rook')} <span class="chess-icon"> ${isWhite ? '♖' : '♜'}</span>`;
+            case 'B':
+                return `${localize('Bishop')} <span class="chess-icon"> ${isWhite ? '♗' : '♝'}</span>`;
+            case 'N':
+                return `${localize('Knight')} <span class="chess-icon"> ${isWhite ? '♘' : '♞'}</span>`;
+            case 'P':
+                return `${localize('Pawn')} <span class="chess-icon"> ${isWhite ? '♙' : '♟'}</span>`;
+            default:
+                return localize('Unknown');
+        }
+    }
+
     switch(pieceAbbreviation.toUpperCase()) {
         case 'K':
             return localize('King');
