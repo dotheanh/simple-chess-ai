@@ -626,6 +626,11 @@ $('#btn-import-fen').click(() => {
     if (strFen !== '') {
         game.load(strFen);
         board.position(game.fen());
+        
+        window.setTimeout(async () => {
+            let sugestion = await generateSuggestion(game);
+            renderSuggestion(sugestion);
+        }, 200);
     } else {
         alert('Fen is empty');
     }
@@ -633,6 +638,16 @@ $('#btn-import-fen').click(() => {
 
 $('#btn-flip').click(() => {
     board.flip();
+});
+
+$('#btn-undo').click(() => {
+    game.undo();
+    game.undo();
+    board.position(game.fen());
+    window.setTimeout(async () => {
+        let sugestion = await generateSuggestion(game);
+        renderSuggestion(sugestion);
+    }, 200);
 });
 
 
