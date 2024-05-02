@@ -268,7 +268,7 @@ async function generateSuggestion(game) {
     suggestion.shift();
     suggestion.forEach((comment, index) => suggestion[index] = comment.replace("moves", "should move"));
     suggestion.push("");
-    suggestion.push("Continuation: " + suggestionStockfish.continuation);
+    suggestion.push(localize("Continuation") + ": " + suggestionStockfish.continuation);
 
 
     return suggestion;
@@ -285,37 +285,37 @@ function generateCommentaries(gameBeforeMove, uglyMove) {
     let fromPos = prettyMove.from;
     let toPos = prettyMove.to;
     let isWhite = uglyMove.color === 'w';
-    let side = isWhite ? 'White' : 'Black';
+    let side = isWhite ? localize('White') : localize('Black');
     let piece = getPieceName(uglyMove.piece);
     let moveIndex = gameBeforeMove.get_move_number() * 2 - (isWhite ? 1 : 0);
     let commentaries = [moveIndex + ". [" + prettyMove.san + "]"];
-    commentaries.push(side + " moves " + piece + " from " + fromPos + " to " + toPos);
+    commentaries.push(`${side} ${localize('moves')} ${piece} ${localize('from')} ${fromPos} ${localize('to')} ${toPos}`);
     
     // AVOID ATTACK
     let attackers = gameBeforeMove.get_cell_attackers(uglyMove.color, uglyMove.from);
     if (attackers.length > 0) {
         let lsStrAttackers = attackers.map((attacker) => getPieceName(attacker.type));
         lsStrAttackers = [...new Set(lsStrAttackers)]; // unique attackers
-        commentaries.push("- Avoiding threat from enemy's " + arrayToSentence(lsStrAttackers));
+        commentaries.push(`- ${localize('Avoiding threat from enemy\'s')} ${arrayToSentence(lsStrAttackers)}`);
     }
 
     if (prettyMove.flags !== FLAGS.NORMAL) {
         let flags = prettyMove.flags.split("");
         flags.forEach(flag => {
             if (flag === FLAGS.CAPTURE) {
-                commentaries.push("- Capture enemy's " + getPieceName(gameBeforeMove.get(toPos).type));
+                commentaries.push(`- ${localize('Capture enemy\'s')} ${getPieceName(gameBeforeMove.get(toPos).type)}`);
             }
             else if (flag === FLAGS.EP_CAPTURE) {
-                commentaries.push("- En passant Capture enemy's Pawn");
+                commentaries.push(`- ${localize('En passant Capture enemy\'s')} ${localize('Pawn')}`);
             }
             else if (flag === FLAGS.PROMOTION) {
-                commentaries.push("- Promoted the Pawn into a " + getPieceName(uglyMove.promotion));
+                commentaries.push(`- ${localize('Promoted the Pawn into a')} ${getPieceName(uglyMove.promotion)}`);
             }
             else if (flag === FLAGS.KSIDE_CASTLE) {
-                commentaries.push("- King side castle");
+                commentaries.push(`- ${localize('King side castle')}`);
             }
             else if (flag === FLAGS.QSIDE_CASTLE) {
-                commentaries.push("- Queen side castle");
+                commentaries.push(`- ${localize('Queen side castle')}`);
             }
         });
 
@@ -345,14 +345,14 @@ function generateCommentaries(gameBeforeMove, uglyMove) {
     });
     console.log("potentialMoves", potentialMoves);
 
-    // ATTACKING / THREATING
+    // ATTACKING / THREATENING
     if (lsAttacking.length > 0) {
-        commentaries.push("- Threating enemy's " + arrayToSentence(lsAttacking));
+        commentaries.push(`- ${localize('Threating enemy\'s')} ${arrayToSentence(lsAttacking)}`);
     }
 
     // SUPPORTING
     if (lsSupporting.length > 0) {
-        commentaries.push("- Support allied " + arrayToSentence(lsSupporting));
+        commentaries.push(`- ${localize('Support allied')} ${arrayToSentence(lsSupporting)}`);
     }
 
     // ALLOW/PREPARE FOR NEW MOVES
@@ -380,7 +380,7 @@ function generateCommentaries(gameBeforeMove, uglyMove) {
         }
     }
     if (lsStrNewGoodAvailableMoves.length > 0) {
-        commentaries.push("- Allow us to do " + arrayToSentence(lsStrNewGoodAvailableMoves, "or"));
+        commentaries.push(`- ${localize('Allow us to do')} ${arrayToSentence(lsStrNewGoodAvailableMoves, localize("or"))}`);
     }
 
     // BLOCK ENEMY GOOD MOVES
@@ -406,7 +406,7 @@ function generateCommentaries(gameBeforeMove, uglyMove) {
         }
     }
     if (lsStrBlockedGoodAvailableMoves.length > 0) {
-        commentaries.push("- Block enemy from doing " + arrayToSentence(lsStrBlockedGoodAvailableMoves, "or"));
+        commentaries.push(`- ${localize('Block enemy from doing')} ${arrayToSentence(lsStrBlockedGoodAvailableMoves, localize("or"))}`);
     }
 
     // TODO: protect king or queen
@@ -416,21 +416,45 @@ function generateCommentaries(gameBeforeMove, uglyMove) {
 
     // GAME OVER
     if (gameAfterMove.in_checkmate()) {
-        commentaries.push("Checkmate!!!");
+        commentaries.push(`${localize('Checkmate')}!!!`);
     }
     if (gameAfterMove.in_stalemate()) {
-        commentaries.push("The game has been stalemate...");
+        commentaries.push(`${localize('The game has been stalemate')}...`);
     }
     
     if (gameAfterMove.game_over()) {
-        commentaries.push("GAME OVER");
+        commentaries.push(`${localize('GAME OVER')}`);
     }
     
-    gameAfterMove.undo(); // althought I have clone the gameBeforeMove object, the method move still
-    // effects the original object, so we need to revert it here
+    gameAfterMove.undo(); // although I have cloned the gameBeforeMove object, the method move still
+    // affects the original object, so we need to revert it here
 
     return commentaries;
 };
+
+function localize(key) {
+    let currentLanguage = $('#language').find(':selected').val();
+    let translations = {};
+
+    // Load translations from JSON file
+    $.ajax({
+        url: "translations.json",
+        async: false,
+        dataType: 'json',
+        success: function(data) {
+            translations = data;
+        },
+        error: function(xhr, status, error) {
+            console.error("Error loading translations:", error);
+        }
+    });
+
+    if (translations[currentLanguage] && translations[currentLanguage][key]) {
+        return translations[currentLanguage][key];
+    } else {
+        return key;
+    }
+}
 
 var positionCount;
 var getBestMove = function (game) {
@@ -811,23 +835,24 @@ function convertToFenWithDashes(fen) {
 function getPieceName(pieceAbbreviation) {
     switch(pieceAbbreviation.toUpperCase()) {
         case 'K':
-            return 'King';
+            return localize('King');
         case 'Q':
-            return 'Queen';
+            return localize('Queen');
         case 'R':
-            return 'Rook';
+            return localize('Rook');
         case 'B':
-            return 'Bishop';
+            return localize('Bishop');
         case 'N':
-            return 'Knight';
+            return localize('Knight');
         case 'P':
-            return 'Pawn';
+            return localize('Pawn');
         default:
-            return 'Unknown';
+            return localize('Unknown');
     }
 }
 
-function arrayToSentence(names, linkingWord = "and") {
+function arrayToSentence(names, linkingWord) {
+    if (linkingWord === undefined) linkingWord = localize("and");
     names = [...new Set(names)]; // unique names
     if (names.length === 0) return "";
     if (names.length === 1) return names[0];

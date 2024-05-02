@@ -21,9 +21,18 @@
     font-weight: bold;
     max-width: 20%;
 }
+.move-suggestion-title {
+    position: absolute;
+    right: 10rem;
+    top: 15%;
+    max-height: 60%;
+    color: green;
+    font-weight: bold;
+    max-width: 20%;
+}
 .move-suggestion {
     position: absolute;
-    right: 20px;
+    right: 1.25rem;
     top: 20%;
     max-height: 60%;
     color: green;
