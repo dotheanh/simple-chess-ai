@@ -274,6 +274,8 @@ async function generateSuggestion(game) {
     suggestion.shift();
     suggestion.push("");
     suggestion.push(localize("Continuation") + ": " + suggestionStockfish.continuation);
+    suggestion.push("");
+    suggestion.push(generateEvaluationComment(suggestionStockfish.evaluation));
 
 
     return suggestion;
@@ -439,6 +441,34 @@ function generateCommentaries(gameBeforeMove, uglyMove) {
 
     return commentaries;
 };
+
+function generateEvaluationComment(evalScore) {
+    evalScore = parseFloat(evalScore);
+    if (isNaN(evalScore)) return "";
+
+    let color = evalScore > 0 ? localize("White") : localize("Black");
+    evalScore = Math.abs(evalScore);
+
+    if (evalScore >= 7.0) {
+        return `${localize(color)} ${localize("is absolutely dominating the game!")}`;
+    } else if (evalScore >= 5.0) {
+        return `${localize(color)} ${localize("is overwhelmingly ahead!")}`;
+    } else if (evalScore >= 4.0) {
+        return `${localize(color)} ${localize("has an enormous advantage!")}`;
+    } else if (evalScore >= 3.0) {
+        return `${localize(color)} ${localize("is greatly ahead!")}`;
+    } else if (evalScore >= 2.0) {
+        return `${localize(color)} ${localize("is dominating the game!")}`;
+    } else if (evalScore >= 1.0) {
+        return `${localize(color)} ${localize("is in a winning position!")}`;
+    } else if (evalScore >= 0.5) {
+        return `${localize(color)} ${localize("has a significant advantage.")}`;
+    } else if (evalScore >= 0.2) {
+        return `${localize(color)} ${localize("is slightly ahead.")}`;
+    } else {
+        return localize("The position is balanced.");
+    }
+}
 
 function localize(key) {
     let currentLanguage = $('#language').find(':selected').val();

@@ -1,6 +1,7 @@
 {
     "en": {
         "Suggestion": "Suggestion",
+        "White": "White",
         "Black": "Black",
         "moves": "move",
         "from": "from",
@@ -27,7 +28,16 @@
         "Knight": "Knight",
         "Pawn": "Pawn",
         "Unknown": "Unknown",
-        "Continuation": "Continuation"
+        "Continuation": "Continuation",
+        "is absolutely dominating the game!": "is absolutely dominating the game!",
+        "is overwhelmingly ahead!": "is overwhelmingly ahead!",
+        "has an enormous advantage!": "has an enormous advantage!",
+        "is greatly ahead!": "is greatly ahead!",
+        "is dominating the game!": "is dominating the game!",
+        "is in a winning position!": "is in a winning position!",
+        "has a significant advantage.": "has a significant advantage.",
+        "is slightly ahead.": "is slightly ahead.",
+        "The position is balanced.": "The position is balanced."
     },
     "vi": {
         "Suggestion": "Gợi ý",
@@ -58,11 +68,21 @@
         "Knight": "Mã",
         "Pawn": "Tốt",
         "Unknown": "Không xác định",
-        "Continuation": "Kế hoạch"
+        "Continuation": "Kế hoạch",
+        "is absolutely dominating the game!": "đang tiến rất gần tới chiến thắng!",
+        "is overwhelmingly ahead!": "đang hướng tới một chiến thắng!",
+        "has an enormous advantage!": "đang có ưu thế tuyệt đối!",
+        "is greatly ahead!": "đang kiểm soát hoàn toàn trò chơi!",
+        "is dominating the game!": "đang kiểm soát thế trận!",
+        "is in a winning position!": "đang dẫn trước đối thủ!",
+        "has a significant advantage.": "đang có lợi thế lớn.",
+        "is slightly ahead.": "đang chiếm ưu thế.",
+        "The position is balanced.": "Thế trận đang cân bằng."
     },
     "fr": {
         "Suggestion": "Suggestion",
-        "Black": "Faction noire",
+        "White": "Blanc",
+        "Black": "Noir",
         "moves": "déplace",
         "from": "de",
         "to": "à",
@@ -86,7 +106,16 @@
         "Knight": "Cavalier",
         "Pawn": "Pion",
         "Unknown": "Inconnu",
-        "Continuation": "Continuation"
+        "Continuation": "Continuation",
+        "is absolutely dominating the game!": "domine absolument la partie!",
+        "is overwhelmingly ahead!": "est écrasamment en avance!",
+        "has an enormous advantage!": "a un énorme avantage!",
+        "is greatly ahead!": "est nettement en tête!",
+        "is dominating the game!": "domine la partie!",
+        "is in a winning position!": "est en position de gagner!",
+        "has a significant advantage.": "a un avantage significatif.",
+        "is slightly ahead.": "est légèrement en avance.",
+        "The position is balanced.": "La position est équilibrée."
     },
     "zh": {
         "Suggestion": "建议",
@@ -117,7 +146,16 @@
         "Knight": "马",
         "Pawn": "兵",
         "Unknown": "未知",
-        "Continuation": "延续"
+        "Continuation": "延续",
+        "is absolutely dominating the game!": "绝对主导比赛！",
+        "is overwhelmingly ahead!": "压倒性领先！",
+        "has an enormous advantage!": "具有巨大优势！",
+        "is greatly ahead!": "大大领先！",
+        "is dominating the game!": "主导比赛！",
+        "is in a winning position!": "处于获胜位置！",
+        "has a significant advantage.": "具有重大优势。",
+        "is slightly ahead.": "稍微领先。",
+        "The position is balanced.": "位置平衡。"
     },
     "ru": {
         "Suggestion": "Предложение",
@@ -148,6 +186,15 @@
         "Knight": "Конь",
         "Pawn": "Пешка",
         "Unknown": "Неизвестный",
-        "Continuation": "Продолжение"
+        "Continuation": "Продолжение",
+        "is absolutely dominating the game!": "абсолютно доминирует в игре!",
+        "is overwhelmingly ahead!": "подавляющим преимуществом опережает!",
+        "has an enormous advantage!": "имеет огромное преимущество!",
+        "is greatly ahead!": "сильно опережает!",
+        "is dominating the game!": "доминирует в игре!",
+        "is in a winning position!": "находится в выигрышной позиции!",
+        "has a significant advantage.": "имеет значительное преимущество.",
+        "is slightly ahead.": "немного опережает.",
+        "The position is balanced.": "Позиция сбалансирована."
     }
 }
