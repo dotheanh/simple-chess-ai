@@ -22,6 +22,12 @@ $(document).ready(function() {
             $('#checkbox-ai').prop('disabled', false);
         }
     });
+    $('#language').change(function() {
+        window.setTimeout(async () => {
+            let sugestion = await generateSuggestion(game);
+            renderSuggestion(sugestion);
+        }, 200);
+    });
 });
 
 /*The "AI" part starts here */
@@ -266,7 +272,6 @@ async function generateSuggestion(game) {
 
     // Normalization Commentaries into suggestions
     suggestion.shift();
-    suggestion.forEach((comment, index) => suggestion[index] = comment.replace("moves", "should move"));
     suggestion.push("");
     suggestion.push(localize("Continuation") + ": " + suggestionStockfish.continuation);
 
