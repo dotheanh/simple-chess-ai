@@ -72,7 +72,29 @@
     <script src="lib/chessboardjs/js/chessboard-0.3.0.js"></script>
     <script src="script.js"></script>
     <script>
+        // Get the chessboard element
+        const chessboard = document.getElementById('board');
 
+        // Add event listeners for touch events
+        chessboard.addEventListener('touchstart', handleTouchStart, false);
+        chessboard.addEventListener('touchend', handleTouchEnd, false);
+
+        let xDown = null;
+        let yDown = null;
+
+        function handleTouchStart(event) {
+            const firstTouch = event.touches[0];
+            xDown = firstTouch.clientX;
+            yDown = firstTouch.clientY;
+
+            // Add the class "overflow-hidden" to the body tag
+            document.body.classList.add("overflow-hidden");
+        }
+
+        function handleTouchEnd(event) {
+            // Remove the class "overflow-hidden" from the body tag
+            document.body.classList.remove("overflow-hidden");
+        }
     </script>
 </body>
 
