@@ -59,8 +59,21 @@
         right: 0;
     }
 
+    .move-suggestion-title {
+        font-size: small;
+    }
+
     .move-suggestion {
         height: 230px;
+        font-size: small;
+    }
+
+    .move-commentary {
+        max-height: 200px;
+    }
+    
+    .info {
+        font-size: small;
     }
 
     .board {
@@ -77,7 +90,7 @@
         height: 11.25vw!important;
     }
 
-    .move-commentary {
-        max-height: 300px;
+    body {
+        overflow: hidden !important;
     }
 }
