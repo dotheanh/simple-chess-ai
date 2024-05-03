@@ -20,6 +20,14 @@
     color: rgb(7, 7, 90);
     max-width: 20%;
 }
+.move-suggestion {
+    position: absolute;
+    right: 1.25rem;
+    top: 20%;
+    max-height: 60%;
+    color: black;
+    max-width: 20%;
+}
 .move-suggestion-title {
     position: absolute;
     right: 10rem;
@@ -29,18 +37,42 @@
     font-weight: bold;
     max-width: 20%;
 }
-.move-suggestion {
-    position: absolute;
-    right: 1.25rem;
-    top: 20%;
-    max-height: 60%;
-    color: black;
-    max-width: 20%;
-}
 
 #fen-input {
     width: 10rem;
 }
 .chess-icon {
     font-size: 1.25rem; /* Adjust the size as needed */
+}
+
+@media only screen and (max-width: 950px) {
+    .move-commentary,
+    .move-suggestion-title,
+    .move-suggestion {
+        position: relative;
+        max-width: 100%;
+        top: 0;
+        right: 0;
+    }
+
+    .move-suggestion {
+        height: 230px;
+    }
+
+    .board {
+        width: 90vw!important;
+    }
+
+    .board-b72b1 {
+        width: 90vw!important;
+    }
+
+    .square-55d63 {
+        width: 11.25vw!important;
+        height: 11.25vw!important;
+    }
+
+    .move-commentary {
+        max-height: 300px;
+    }
 }
