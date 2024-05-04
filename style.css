@@ -94,3 +94,19 @@
         overflow: hidden !important;
     }
 }
+
+
+
+/* render arrow */
+#arrow-container {
+    pointer-events: none;
+}
+.arrow {
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.d-none {
+    display: none;
+}

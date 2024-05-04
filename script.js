@@ -296,7 +296,7 @@ function generateCommentaries(gameBeforeMove, uglyMove) {
     let piece = getPieceName(uglyMove.piece, uglyMove.color);
     let moveIndex = gameBeforeMove.get_move_number() * 2 - (isWhite ? 1 : 0);
     let commentaries = [moveIndex + ". [" + prettyMove.san + "]"];
-    commentaries.push(`${side} ${localize('moves')} ${piece} ${localize('from')} ${fromPos} ${localize('to')} ${toPos}`);
+    commentaries.push(`${side} ${localize('moves')} ${piece} ${localize('from')} ${fromPos} ${localize('to')} ${toPos}` + generateArrowData(fromPos, toPos,ARROW_COLOR.GREEN));
     
     // AVOID ATTACK
     let attackers = gameBeforeMove.get_cell_attackers(uglyMove.color, uglyMove.from);
@@ -592,7 +592,63 @@ var renderSuggestion = function (comments) {
     }
     suggestionElement.scrollTop(suggestionElement[0].scrollHeight);
 
+    renderArrows(comments);
 };
+
+var renderArrows = function (comments) {
+    removeAllArrows();
+
+    comments.forEach(sentence => {
+        const regex = /(\S+)\s*{(\w+)\s*->\s*(\w+)}/;
+        const match = sentence.match(regex);
+        
+        if (match) {
+            const color = match[1];
+            const from = match[2];
+            const to = match[3];
+            console.log("Capture 1:", color);
+            console.log("Capture 2:", from);
+            console.log("Capture 3:", to);
+            drawArrow({
+                from: "square-" + from,
+                to: "square-" + to,
+                color: color
+            })
+        }
+    });
+};
+
+var drawArrow = function(arrow) {
+    const startElement = document.querySelector(`.${arrow.from}`);
+    const endElement = document.querySelector(`.${arrow.to}`);
+    
+    // Get positions of start and end elements relative to viewport
+    const startPos = startElement.getBoundingClientRect();
+    const endPos = endElement.getBoundingClientRect();
+    
+    const arrowElements = document.querySelectorAll('.arrow-' + arrow.color);
+    arrowElements.forEach(element => {
+        if (element.classList.contains('d-none')) {
+            const arrowLine = element.querySelector('line');
+            arrowLine.setAttribute('x1', startPos.left + startPos.width / 2);
+            arrowLine.setAttribute('y1', startPos.top + startPos.height / 2);
+            arrowLine.setAttribute('x2', endPos.left + endPos.width / 2);
+            arrowLine.setAttribute('y2', endPos.top + endPos.height / 2);
+
+            element.classList.remove('d-none');
+            return;
+        }
+    });
+}
+
+function removeAllArrows() {
+    const arrowElements = document.querySelectorAll('.arrow');
+    arrowElements.forEach(element => {
+        if (!element.classList.contains('d-none')) {
+            element.classList.add('d-none');
+        }
+    });
+}
 
 var onDrop = function (source, target) {
     let uglyMove = null;
@@ -918,4 +974,14 @@ function arrayToSentence(names, linkingWord) {
     // For two or more elements
     const last = names.pop(); // Remove the last element
     return names.join(", ") + " " + linkingWord + " " + last;
+}
+
+let ARROW_COLOR = {
+    RED: "red",
+    GREEN: "green",
+    BLUE: "blue",
+};
+
+function generateArrowData(fromCell, toCell, color) {
+    return " " + color + "{" + fromCell + "->" + toCell + "}";
 }
