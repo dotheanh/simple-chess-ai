@@ -118,7 +118,7 @@
 .arrow-green{
     z-index: 11;
 }
-.arrow-orange,.arrow-blue line {
+.arrow-orange,.arrow-blue path {
     stroke-dasharray: 5, 5;
 }
 

@@ -626,6 +626,9 @@ var parseArrowDataNRemove = function (sentence) {
     let matches = [];
     let match;
 
+    // Reset the lastIndex property of the regex object
+    regex.lastIndex = 0;
+
     while ((match = regex.exec(sentence)) !== null) {
         const color = match[1];
         const from = match[2];
@@ -637,14 +640,17 @@ var parseArrowDataNRemove = function (sentence) {
         });
 
         // Remove the matched group from the sentence
-        sentence = sentence.replace(match[0], '');
+        sentence = sentence.replace(" " + match[0], '');
+
+        // Reset the lastIndex property of the regex object
+        regex.lastIndex = 0;
     }
 
     return { matches: matches, remainingSentence: sentence };
 };
 
+
 var renderArrow = function(arrow) {
-    console.log(arrow)
     const startElement = document.querySelector(`.square-${arrow.from}`);
     const endElement = document.querySelector(`.square-${arrow.to}`);
     
@@ -660,24 +666,36 @@ var renderArrow = function(arrow) {
     const dx = x2 - x1;
     const dy = y2 - y1;
     const distance = Math.sqrt(dx * dx + dy * dy);
-    const newDistance = distance - 20;
+    const newDistance = distance - 15;
     const ratio = newDistance / distance;
     x2 = x1 + dx * ratio;
     y2 = y1 + dy * ratio;
+
+    // red line is slightly deviated, parallel with original
+    if (arrow.color === ARROW_COLOR.RED) {// Calculate perpendicular offset
+        const offsetVector = (dx > dy) ? {x: 0, y : 3} : {x: 3, y: 0};
+        
+        // Adjust endpoint coordinates with the offset
+        x1 = x1 + offsetVector.x;
+        y1 = y1 + offsetVector.y;
+        x2 = x2 + offsetVector.x;
+        y2 = y2 + offsetVector.y;
+    }
     
-    const arrowElements = document.querySelectorAll('.arrow-' + arrow.color);
-    arrowElements.forEach(element => {
+    const container = document.getElementById('arrow-container');
+    const arrowElements = container.querySelectorAll('.arrow-' + arrow.color);
+    for (let i = 0; i < arrowElements.length; i++) {
+        let element = arrowElements[i];
         if (element.classList.contains('d-none')) {
-            const arrowLine = element.querySelector('line');
-            arrowLine.setAttribute('x1', x1);
-            arrowLine.setAttribute('y1', y1);
-            arrowLine.setAttribute('x2', x2);
-            arrowLine.setAttribute('y2', y2);
+            const arrowLine = element.querySelector('path');
+            let xMid = x1; // to draw curve, but currently not using
+            let yMid = y1; // to draw curve, but currently not using
+            arrowLine.setAttribute('d', `M${x1},${y1} Q${xMid},${yMid} ${x2},${y2}`);
 
             element.classList.remove('d-none');
-            return;
+            break;
         }
-    });
+    };
 }
 
 function removeAllArrows() {
@@ -690,7 +708,6 @@ function removeAllArrows() {
 }
 
 var onDrop = function (source, target) {
-    removeAllArrows();
     let uglyMove = null;
     let tempMoveObj = {
         from: source,
@@ -719,6 +736,7 @@ var onDrop = function (source, target) {
     if (move === null) {
         return 'snapback';
     }
+    removeAllArrows();
 
     renderMoveHistory(game.history());
 
