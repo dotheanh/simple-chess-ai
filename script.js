@@ -595,8 +595,11 @@ var renderMoveHistory = function (moves) {
 
 var renderCommentary = function (comments) {
     if (!comments || comments.length === 0) return;
+
     var commentaryElement = $('#move-commentary');
     for (var i = 0; i < comments.length; i ++) {
+        let parseData = parseArrowDataNRemove(comments[i]);
+        comments[i] = parseData.remainingSentence;
         commentaryElement.append('<span>' + comments[i] + '</span><br>')
     }
     commentaryElement.append('<br>')
