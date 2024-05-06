@@ -352,6 +352,8 @@ function generateCommentaries(gameBeforeMove, uglyMove) {
     let potentialMoves = gameAfterMove.get_potential_moves(uglyMove.to);
     let lsAttacking = [];
     let lsSupporting = [];
+    let strArrowThreating = "";
+    let strArrowSupport = "";
 
     // convert flags from BITS to FLAGS, and then classify the move 
     potentialMoves.forEach((move) => {
@@ -361,23 +363,25 @@ function generateCommentaries(gameBeforeMove, uglyMove) {
             let piece = gameAfterMove.get(prettyMove.to);
             let target = getPieceName(piece.type, piece.color) + " (" + prettyMove.to + ")";
             lsAttacking.push(target);
+            strArrowThreating += generateArrowData(prettyMove.from, prettyMove.to, ARROW_COLOR.ORANGE);
         }
         if (prettyMove.flags.includes(FLAGS.SUPPORT)) {
             let piece = gameAfterMove.get(prettyMove.to);
             let target = getPieceName(piece.type, piece.color) + " (" + prettyMove.to + ")";
             lsSupporting.push(target);
+            strArrowSupport += generateArrowData(prettyMove.from, prettyMove.to, ARROW_COLOR.BLUE);
         }
     });
     console.log("potentialMoves", potentialMoves);
 
     // ATTACKING / THREATENING
     if (lsAttacking.length > 0) {
-        commentaries.push(`- ${localize('Threating enemy\'s')} ${arrayToSentence(lsAttacking)}`);
+        commentaries.push(`- ${localize('Threating enemy\'s')} ${arrayToSentence(lsAttacking)}` + strArrowThreating);
     }
 
     // SUPPORTING
     if (lsSupporting.length > 0) {
-        commentaries.push(`- ${localize('Support allied')} ${arrayToSentence(lsSupporting)}`);
+        commentaries.push(`- ${localize('Support allied')} ${arrayToSentence(lsSupporting)}` + strArrowSupport);
     }
 
     // ALLOW/PREPARE FOR NEW MOVES
@@ -1003,6 +1007,7 @@ let ARROW_COLOR = {
     RED: "red",
     GREEN: "green",
     BLUE: "blue",
+    ORANGE: "orange",
 };
 
 function generateArrowData(fromCell, toCell, color) {
