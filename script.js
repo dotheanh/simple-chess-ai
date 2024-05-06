@@ -463,7 +463,13 @@ function generateCommentaries(gameBeforeMove, uglyMove) {
         commentaries.push(`${localize('Checkmate')}!!!`);
     }
     if (gameAfterMove.in_stalemate()) {
-        commentaries.push(`${localize('The game has been stalemate')}...`);
+        commentaries.push(`${localize('The game has been stalemate')}`);
+    }
+    if (gameAfterMove.insufficient_material()) {
+        commentaries.push(`${localize('The game is drawn because insufficient material')}`);
+    }
+    if (gameAfterMove.in_threefold_repetition()) {
+        commentaries.push(`${localize('The game is drawn in threefold repetition')}`);
     }
     
     if (gameAfterMove.game_over()) {

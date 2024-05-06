@@ -37,7 +37,9 @@
         "is in a winning position!": "is in a winning position!",
         "has a significant advantage.": "has a significant advantage.",
         "is slightly ahead.": "is slightly ahead.",
-        "The position is balanced.": "The position is balanced."
+        "The position is balanced.": "The position is balanced.",
+        "The game is drawn because insufficient material": "The game is drawn because insufficient material",
+        "The game is drawn in threefold repetition": "The game is drawn in threefold repetition"
     },
     "vi": {
         "Suggestion": "Gợi ý",
@@ -77,7 +79,9 @@
         "is in a winning position!": "đang dẫn trước đối thủ!",
         "has a significant advantage.": "đang có lợi thế lớn.",
         "is slightly ahead.": "đang chiếm ưu thế.",
-        "The position is balanced.": "Thế trận đang cân bằng."
+        "The position is balanced.": "Thế trận đang cân bằng.",
+        "The game is drawn because insufficient material": "Trận đấu được xem là hòa do thiếu lực lượng",
+        "The game is drawn in threefold repetition": "Trận đấu được xem là hòa do bất biến ba lần"
     },
     "fr": {
         "Suggestion": "Suggestion",
@@ -115,7 +119,9 @@
         "is in a winning position!": "est en position de gagner!",
         "has a significant advantage.": "a un avantage significatif.",
         "is slightly ahead.": "est légèrement en avance.",
-        "The position is balanced.": "La position est équilibrée."
+        "The position is balanced.": "La position est équilibrée.",
+        "The game is drawn because insufficient material": "La partie est nulle en raison d'un matériel insuffisant",
+        "The game is drawn in threefold repetition": "La partie est nulle en cas de répétition triple"
     },
     "zh": {
         "Suggestion": "建议",
@@ -155,7 +161,9 @@
         "is in a winning position!": "处于获胜位置！",
         "has a significant advantage.": "具有重大优势。",
         "is slightly ahead.": "稍微领先。",
-        "The position is balanced.": "位置平衡。"
+        "The position is balanced.": "位置平衡。",
+        "The game is drawn because insufficient material": "游戏因为材料不足而宣布为平局",
+        "The game is drawn in threefold repetition": "游戏因三次重复而宣布为平局"
     },
     "ru": {
         "Suggestion": "Предложение",
@@ -195,6 +203,8 @@
         "is in a winning position!": "находится в выигрышной позиции!",
         "has a significant advantage.": "имеет значительное преимущество.",
         "is slightly ahead.": "немного опережает.",
-        "The position is balanced.": "Позиция сбалансирована."
+        "The position is balanced.": "Позиция сбалансирована.",
+        "The game is drawn because insufficient material": "Игра заканчивается вничью из-за недостатка материала",
+        "The game is drawn in threefold repetition": "Игра заканчивается вничью из-за тройного повторения"
     }
 }
