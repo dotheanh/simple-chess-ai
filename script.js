@@ -36,7 +36,7 @@ document.body.addEventListener('click', function(event) {
         
         removeAllArrows();
         arrowData.forEach(arrowData => {
-            drawArrow(arrowData);
+            renderArrow(arrowData);
         });
     }
 });
@@ -614,7 +614,7 @@ var renderSuggestion = function (comments) {
         comments[i] = parseData.remainingSentence;
         let arrowData = parseData.matches;
         arrowData.forEach(arrowData => {
-            drawArrow(arrowData);
+            renderArrow(arrowData);
         });
         suggestionElement.append('<span class=' + (arrowData.length > 0 ? "comment-arrow" : "") + ' data-info=' + JSON.stringify(arrowData) + '>' + comments[i] + '</span><br>')
     }
@@ -643,7 +643,7 @@ var parseArrowDataNRemove = function (sentence) {
     return { matches: matches, remainingSentence: sentence };
 };
 
-var drawArrow = function(arrow) {
+var renderArrow = function(arrow) {
     console.log(arrow)
     const startElement = document.querySelector(`.square-${arrow.from}`);
     const endElement = document.querySelector(`.square-${arrow.to}`);
@@ -651,15 +651,28 @@ var drawArrow = function(arrow) {
     // Get positions of start and end elements relative to viewport
     const startPos = startElement.getBoundingClientRect();
     const endPos = endElement.getBoundingClientRect();
+    let x1 = startPos.left + startPos.width / 2;
+    let y1 = startPos.top + startPos.height / 2;
+    let x2 = endPos.left + endPos.width / 2;
+    let y2 = endPos.top + endPos.height / 2;
+
+    // shorten length of the arrow line by 20px, which is the length of the arrow head
+    const dx = x2 - x1;
+    const dy = y2 - y1;
+    const distance = Math.sqrt(dx * dx + dy * dy);
+    const newDistance = distance - 20;
+    const ratio = newDistance / distance;
+    x2 = x1 + dx * ratio;
+    y2 = y1 + dy * ratio;
     
     const arrowElements = document.querySelectorAll('.arrow-' + arrow.color);
     arrowElements.forEach(element => {
         if (element.classList.contains('d-none')) {
             const arrowLine = element.querySelector('line');
-            arrowLine.setAttribute('x1', startPos.left + startPos.width / 2);
-            arrowLine.setAttribute('y1', startPos.top + startPos.height / 2);
-            arrowLine.setAttribute('x2', endPos.left + endPos.width / 2);
-            arrowLine.setAttribute('y2', endPos.top + endPos.height / 2);
+            arrowLine.setAttribute('x1', x1);
+            arrowLine.setAttribute('y1', y1);
+            arrowLine.setAttribute('x2', x2);
+            arrowLine.setAttribute('y2', y2);
 
             element.classList.remove('d-none');
             return;

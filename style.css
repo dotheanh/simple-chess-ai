@@ -106,6 +106,21 @@
     top: 0;
     left: 0;
 }
+.arrow-blue{
+    z-index: 8;
+}
+.arrow-orange{
+    z-index: 9;
+}
+.arrow-red{
+    z-index: 10;
+}
+.arrow-green{
+    z-index: 11;
+}
+.arrow-orange,.arrow-blue line {
+    stroke-dasharray: 5, 5;
+}
 
 .d-none {
     display: none;
