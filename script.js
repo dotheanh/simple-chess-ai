@@ -452,6 +452,11 @@ function generateCommentaries(gameBeforeMove, uglyMove) {
     // TODO: prepare to capture unsupported enemy pieces
     // TODO: prepare for the moves in continuation from stockfish
 
+    // GAME OPENING
+    let ecoData = getECOFromFEN(gameAfterMove.fen());
+    if (ecoData) {
+        commentaries.push("[" + ecoData.eco + "] " + ecoData.name);
+    }
 
     // GAME OVER
     if (gameAfterMove.in_checkmate()) {
@@ -521,6 +526,23 @@ function localize(key) {
     } else {
         return key;
     }
+}
+
+function getECOFromFEN(FEN) {
+    // Load ECO codes from JSON file
+    $.ajax({
+        url: "data/eco_codes.json",
+        async: false,
+        dataType: 'json',
+        success: function(data) {
+            ecoData = data;
+        },
+        error: function(xhr, status, error) {
+            console.error("Error loading ECO data:", error);
+        }
+    });
+
+    return ecoData[FEN];
 }
 
 var positionCount;
