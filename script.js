@@ -22,6 +22,14 @@ $(document).ready(function() {
             $('#checkbox-ai').prop('disabled', false);
         }
     });
+    $('#checkbox-suggest').change(function() {
+        if ($(this).is(':checked')) {
+            $('#move-suggestion-title, #move-suggestion, #arrow-container').removeClass('d-none');
+        } else {
+            $('#move-suggestion-title, #move-suggestion, #arrow-container').addClass('d-none');
+        }
+    });
+    
     $('#language').change(function() {
         window.setTimeout(async () => {
             let sugestion = await generateSuggestion(game);
