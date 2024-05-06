@@ -387,6 +387,7 @@ function generateCommentaries(gameBeforeMove, uglyMove) {
     // ALLOW/PREPARE FOR NEW MOVES
     const lsAllOurAvaiableMovesAfter = gameAfterMove.enemy_ugly_moves();
     const lsStrNewGoodAvailableMoves = [];
+    let strArrowGoodAvailableMoves = "";
     for (let i = 0; i < lsAllOurAvaiableMovesAfter.length; i++) {
         let move = lsAllOurAvaiableMovesAfter[i];
         // exclude all the moves starting from the end pos of current move, because we have talked about them above in the "potentialMoves" section
@@ -405,11 +406,12 @@ function generateCommentaries(gameBeforeMove, uglyMove) {
             || prettyMove.flags.includes(FLAGS.KSIDE_CASTLE)
             || prettyMove.flags.includes(FLAGS.QSIDE_CASTLE)) {
                 lsStrNewGoodAvailableMoves.push(prettyMove.from + prettyMove.to);
+                strArrowGoodAvailableMoves += generateArrowData(prettyMove.from, prettyMove.to, ARROW_COLOR.WHITE);
             }
         }
     }
     if (lsStrNewGoodAvailableMoves.length > 0) {
-        commentaries.push(`- ${localize('Allow us to do')} ${arrayToSentence(lsStrNewGoodAvailableMoves, localize("or"))}`);
+        commentaries.push(`- ${localize('Allow us to do')} ${arrayToSentence(lsStrNewGoodAvailableMoves, localize("or"))}` + strArrowGoodAvailableMoves);
     }
 
     // BLOCK ENEMY GOOD MOVES
@@ -1039,6 +1041,7 @@ let ARROW_COLOR = {
     GREEN: "green",
     BLUE: "blue",
     ORANGE: "orange",
+    WHITE: "white",
 };
 
 function generateArrowData(fromCell, toCell, color) {
