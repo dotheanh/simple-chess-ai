@@ -144,6 +144,9 @@
     cursor: pointer;
 }
 
+.red-square {
+    background-color: red;
+}
 
 /* Style for modal */
 .modal {

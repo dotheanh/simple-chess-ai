@@ -448,8 +448,11 @@ function generateCommentaries(gameBeforeMove, uglyMove) {
         commentaries.push(`- ${localize('Block enemy from doing')} ${arrayToSentence(lsStrBlockedGoodAvailableMoves, localize("or"))}`);
     }
 
-    // TODO: protect king or queen
-    // TODO: prepare to capture unsupported enemy pieces
+    const safety = gameAfterMove.check_safe_square(uglyMove.to);
+    if (safety < 0) {
+        commentaries.push(`- ${localize('Notice that this square is in danger')}` + generateArrowData(prettyMove.to, prettyMove.to, ARROW_COLOR.RED));
+    }
+
     // TODO: prepare for the moves in continuation from stockfish
 
     // GAME OPENING
@@ -692,6 +695,11 @@ var parseArrowDataNRemove = function (sentence) {
 
 
 var renderArrow = function(arrow) {
+    if (arrow.from === arrow.to) { // highlight the cell instead
+        renderSpecialCell(arrow);
+        return;
+    }
+
     const startElement = document.querySelector(`.square-${arrow.from}`);
     const endElement = document.querySelector(`.square-${arrow.to}`);
     
@@ -739,6 +747,10 @@ var renderArrow = function(arrow) {
     };
 }
 
+var renderSpecialCell = function(data) {
+    $(`.square-${data.from}`).addClass(data.color + '-square');
+}
+
 function removeAllArrows() {
     const arrowElements = document.querySelectorAll('.arrow');
     arrowElements.forEach(element => {
@@ -746,6 +758,12 @@ function removeAllArrows() {
             element.classList.add('d-none');
         }
     });
+
+    removeAllSpecialCells();
+}
+
+function removeAllSpecialCells() {
+    $('div[class^="chessboard"] > div[class^="board"] > div[class^="row"] > div[class^="square"]').removeClass(ARROW_COLOR.RED + '-square');
 }
 
 var onDrop = function (source, target) {

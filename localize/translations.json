@@ -39,7 +39,8 @@
         "is slightly ahead.": "is slightly ahead.",
         "The position is balanced.": "The position is balanced.",
         "The game is drawn because insufficient material": "The game is drawn because insufficient material",
-        "The game is drawn in threefold repetition": "The game is drawn in threefold repetition"
+        "The game is drawn in threefold repetition": "The game is drawn in threefold repetition",
+        "Notice that this square is in danger": "Notice that this square is in danger"
     },
     "vi": {
         "Suggestion": "Gợi ý",
@@ -81,7 +82,8 @@
         "is slightly ahead.": "đang chiếm ưu thế.",
         "The position is balanced.": "Thế trận đang cân bằng.",
         "The game is drawn because insufficient material": "Trận đấu được xem là hòa do thiếu lực lượng",
-        "The game is drawn in threefold repetition": "Trận đấu được xem là hòa do bất biến ba lần"
+        "The game is drawn in threefold repetition": "Trận đấu được xem là hòa do bất biến ba lần",
+        "Notice that this square is in danger": "Đây có thể là một nước thí quân"
     },
     "fr": {
         "Suggestion": "Suggestion",
@@ -121,7 +123,8 @@
         "is slightly ahead.": "est légèrement en avance.",
         "The position is balanced.": "La position est équilibrée.",
         "The game is drawn because insufficient material": "La partie est nulle en raison d'un matériel insuffisant",
-        "The game is drawn in threefold repetition": "La partie est nulle en cas de répétition triple"
+        "The game is drawn in threefold repetition": "La partie est nulle en cas de répétition triple",
+        "Notice that this square is in danger": "Notez que cette case est en danger"
     },
     "zh": {
         "Suggestion": "建议",
@@ -163,7 +166,8 @@
         "is slightly ahead.": "稍微领先。",
         "The position is balanced.": "位置平衡。",
         "The game is drawn because insufficient material": "游戏因为材料不足而宣布为平局",
-        "The game is drawn in threefold repetition": "游戏因三次重复而宣布为平局"
+        "The game is drawn in threefold repetition": "游戏因三次重复而宣布为平局",
+        "Notice that this square is in danger": "请注意这个位置处于危险之中"
     },
     "ru": {
         "Suggestion": "Предложение",
@@ -205,6 +209,7 @@
         "is slightly ahead.": "немного опережает.",
         "The position is balanced.": "Позиция сбалансирована.",
         "The game is drawn because insufficient material": "Игра заканчивается вничью из-за недостатка материала",
-        "The game is drawn in threefold repetition": "Игра заканчивается вничью из-за тройного повторения"
+        "The game is drawn in threefold repetition": "Игра заканчивается вничью из-за тройного повторения",
+        "Notice that this square is in danger": "Обратите внимание, что эта клетка находится под угрозой"
     }
 }
