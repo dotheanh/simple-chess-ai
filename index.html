@@ -9,12 +9,20 @@
 </head>
 
 <body>
+    <div id="board" class="board"></div>
+
+    <br>
+    <!-- Button to open modal -->
+    <div class="button-container">
+        <button id="btn-settings">Settings</button>
+    </div>
+    <br>
+
     <div class="move-suggestion-title">
         Suggestion:
     </div>
     <div id="move-suggestion" class="move-suggestion">
     </div>
-    <div id="board" class="board"></div>
     <div class="info">
         <br>
         Language:
@@ -65,7 +73,18 @@
         </div>
         <br>
     </div>
-    <div id="move-commentary" class="move-commentary">
+    <div id="move-commentary-container">
+        <div id="move-commentary" class="move-commentary">
+        </div>
+    </div>
+    <!-- Modal for info -->
+    <div id="infoModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <div class="info-content"></div>
+
+            <div class="commentary-content"></div>
+        </div>
     </div>
 
     <!-- Arrow container -->
@@ -372,14 +391,51 @@
 
     </div>
     
+    <script>
+        // Check if currently in mobile mode
+        const isMobile = window.matchMedia("only screen and (max-width: 950px)").matches;
 
+        // Move info content to modal if in mobile mode
+        if (isMobile) {
+            const infoContent = document.querySelector('.info').innerHTML;
+            document.querySelector('.info').innerHTML = ''; // Clear info content
+            document.querySelector('.info-content').innerHTML = infoContent;
+
+            const commentaryContent = document.querySelector('#move-commentary-container').innerHTML;
+            document.querySelector('#move-commentary-container').innerHTML = ''; // Clear info content
+            document.querySelector('.commentary-content').innerHTML = commentaryContent;
+        }
+
+        // Get the modal
+        const modal = document.getElementById("infoModal");
+
+        // Get the button that opens the modal
+        const btnSettings = document.getElementById("btn-settings");
+
+        // Get the <span> element that closes the modal
+        const spanClose = document.getElementsByClassName("close")[0];
+
+        // When the user clicks on the button, open the modal
+        btnSettings.onclick = function () {
+            modal.style.display = "block";
+        }
+
+        // When the user clicks on <span> (x), close the modal
+        spanClose.onclick = function () {
+            modal.style.display = "none";
+        }
+
+        // When the user clicks anywhere outside of the modal, close it
+        window.onclick = function (event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+    </script>
     <script src="lib/jquery/jquery-3.2.1.min.js"></script>
     <script src="lib/chessboardjs/js/chess.js"></script>
     <script src="lib/chessboardjs/js/chessboard-0.3.0.js"></script>
     <script src="script.js"></script>
-    <script>
-
-    </script>
 </body>
 
 </html>
