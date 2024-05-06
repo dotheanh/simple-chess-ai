@@ -30,6 +30,17 @@ $(document).ready(function() {
     });
 });
 
+document.body.addEventListener('click', function(event) {
+    if (event.target.classList.contains('comment-arrow')) {
+        const arrowData = JSON.parse(event.target.getAttribute('data-info'));
+        
+        removeAllArrows();
+        arrowData.forEach(arrowData => {
+            drawArrow(arrowData);
+        });
+    }
+});
+
 /*The "AI" part starts here */
 
 var minimaxRoot =function(depth, game, isMaximisingPlayer) {
@@ -296,14 +307,18 @@ function generateCommentaries(gameBeforeMove, uglyMove) {
     let piece = getPieceName(uglyMove.piece, uglyMove.color);
     let moveIndex = gameBeforeMove.get_move_number() * 2 - (isWhite ? 1 : 0);
     let commentaries = [moveIndex + ". [" + prettyMove.san + "]"];
-    commentaries.push(`${side} ${localize('moves')} ${piece} ${localize('from')} ${fromPos} ${localize('to')} ${toPos}` + generateArrowData(fromPos, toPos,ARROW_COLOR.GREEN));
+    commentaries.push(`${side} ${localize('moves')} ${piece} ${localize('from')} ${fromPos} ${localize('to')} ${toPos}` + generateArrowData(fromPos, toPos, ARROW_COLOR.GREEN));
     
     // AVOID ATTACK
     let attackers = gameBeforeMove.get_cell_attackers(uglyMove.color, uglyMove.from);
     if (attackers.length > 0) {
         let lsStrAttackers = attackers.map((attacker) => getPieceName(attacker.type, attacker.color));
         lsStrAttackers = [...new Set(lsStrAttackers)]; // unique attackers
-        commentaries.push(`- ${localize('Avoiding threat from enemy\'s')} ${arrayToSentence(lsStrAttackers)}`);
+        let strArrow = "";
+        attackers.forEach(attacker => {
+            strArrow += generateArrowData(attacker.pos, prettyMove.from, ARROW_COLOR.RED);
+        });
+        commentaries.push(`- ${localize('Avoiding threat from enemy\'s')} ${arrayToSentence(lsStrAttackers)}` + strArrow);
     }
 
     if (prettyMove.flags !== FLAGS.NORMAL) {
@@ -585,42 +600,49 @@ var renderCommentary = function (comments) {
 
 var renderSuggestion = function (comments) {
     if (!comments || comments.length === 0) return;
+
     var suggestionElement = $('#move-suggestion').empty();
     suggestionElement.empty();
-    for (var i = 0; i < comments.length; i ++) {
-        suggestionElement.append('<span>' + comments[i] + '</span><br>')
-    }
-    suggestionElement.scrollTop(suggestionElement[0].scrollHeight);
-
-    renderArrows(comments);
-};
-
-var renderArrows = function (comments) {
     removeAllArrows();
 
-    comments.forEach(sentence => {
-        const regex = /(\S+)\s*{(\w+)\s*->\s*(\w+)}/;
-        const match = sentence.match(regex);
-        
-        if (match) {
-            const color = match[1];
-            const from = match[2];
-            const to = match[3];
-            console.log("Capture 1:", color);
-            console.log("Capture 2:", from);
-            console.log("Capture 3:", to);
-            drawArrow({
-                from: "square-" + from,
-                to: "square-" + to,
-                color: color
-            })
-        }
-    });
+    for (var i = 0; i < comments.length; i ++) {
+        let parseData = parseArrowDataNRemove(comments[i]);
+        comments[i] = parseData.remainingSentence;
+        let arrowData = parseData.matches;
+        arrowData.forEach(arrowData => {
+            drawArrow(arrowData);
+        });
+        suggestionElement.append('<span class=' + (arrowData.length > 0 ? "comment-arrow" : "") + ' data-info=' + JSON.stringify(arrowData) + '>' + comments[i] + '</span><br>')
+    }
+    suggestionElement.scrollTop(suggestionElement[0].scrollHeight);
+};
+
+var parseArrowDataNRemove = function (sentence) {
+    const regex = /(\S+)\s*{(\w+)\s*->\s*(\w+)}/g;
+    let matches = [];
+    let match;
+
+    while ((match = regex.exec(sentence)) !== null) {
+        const color = match[1];
+        const from = match[2];
+        const to = match[3];
+        matches.push({
+            from: from,
+            to: to,
+            color: color
+        });
+
+        // Remove the matched group from the sentence
+        sentence = sentence.replace(match[0], '');
+    }
+
+    return { matches: matches, remainingSentence: sentence };
 };
 
 var drawArrow = function(arrow) {
-    const startElement = document.querySelector(`.${arrow.from}`);
-    const endElement = document.querySelector(`.${arrow.to}`);
+    console.log(arrow)
+    const startElement = document.querySelector(`.square-${arrow.from}`);
+    const endElement = document.querySelector(`.square-${arrow.to}`);
     
     // Get positions of start and end elements relative to viewport
     const startPos = startElement.getBoundingClientRect();
@@ -651,6 +673,7 @@ function removeAllArrows() {
 }
 
 var onDrop = function (source, target) {
+    removeAllArrows();
     let uglyMove = null;
     let tempMoveObj = {
         from: source,

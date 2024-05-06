@@ -110,3 +110,7 @@
 .d-none {
     display: none;
 }
+
+.comment-arrow {
+    cursor: pointer;
+}
