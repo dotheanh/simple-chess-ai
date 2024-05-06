@@ -510,7 +510,7 @@ function localize(key) {
 
     // Load translations from JSON file
     $.ajax({
-        url: "translations.json",
+        url: "localize/translations.json",
         async: false,
         dataType: 'json',
         success: function(data) {
