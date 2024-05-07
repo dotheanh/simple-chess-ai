@@ -117,6 +117,12 @@
     top: 0;
     left: 0;
 }
+.arrow-yellow{
+    z-index: 7;
+}
+.arrow-purple{
+    z-index: 7;
+}
 .arrow-white{
     z-index: 7;
 }
@@ -132,11 +138,15 @@
 .arrow-green{
     z-index: 11;
 }
-.arrow-orange,.arrow-blue,.arrow-white path {
+.arrow-orange,.arrow-blue,.arrow-white,.arrow-yellow,.arrow-purple path {
     stroke-dasharray: 5, 5;
 }
 
 .d-none {
+    display: none;
+}
+
+.force-d-none {
     display: none;
 }
 

@@ -11,7 +11,6 @@
 <body>
     <div id="board" class="board"></div>
 
-    <br>
     <!-- Button to open modal -->
     <div class="button-container">
         <button id="btn-settings">Settings</button>
@@ -67,6 +66,9 @@
         <input type="checkbox" id="checkbox-suggest" value="isShowSuggestion" checked>
         <label for="checkbox-suggest">Show Suggestion</label>
         <br>
+        <input type="checkbox" id="checkbox-plan-arrow" value="isShowPlanArrow" checked>
+        <label for="checkbox-plan-arrow">Show Plan Arrows</label>
+        <br>
         <span style="display: none;">Positions evaluated: <span id="position-count"></span></span>
         <br>
         <span style="display: none;">Positions/s: <span id="positions-per-s"></span> </span>
@@ -96,304 +98,531 @@
         <svg class="arrow arrow-green d-none" width="100%" height="100%">
             <defs>
                 <marker id="arrowhead-1" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto">
-                    <polygon points="0 0, 10 3.5, 0 7" fill="green"/>
+                    <polygon points="0 0, 10 3.5, 0 7" fill="green" />
                 </marker>
             </defs>
-            <path d="M500,500 Q600,550 700,600" style="stroke: green; stroke-width: 2px; marker-end: url(#arrowhead-1);"/>
+            <path d="M500,500 Q600,550 700,600"
+                style="stroke: green; stroke-width: 2px; marker-end: url(#arrowhead-1);" />
         </svg>
         <svg class="arrow arrow-green d-none" width="100%" height="100%">
             <defs>
                 <marker id="arrowhead-2" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto">
-                    <polygon points="0 0, 10 3.5, 0 7" fill="green"/>
+                    <polygon points="0 0, 10 3.5, 0 7" fill="green" />
                 </marker>
             </defs>
-            <path d="M500,500 Q600,550 700,600" style="stroke: green; stroke-width: 2px; marker-end: url(#arrowhead-2);"/>
+            <path d="M500,500 Q600,550 700,600"
+                style="stroke: green; stroke-width: 2px; marker-end: url(#arrowhead-2);" />
         </svg>
         <svg class="arrow arrow-green d-none" width="100%" height="100%">
             <defs>
                 <marker id="arrowhead-3" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto">
-                    <polygon points="0 0, 10 3.5, 0 7" fill="green"/>
+                    <polygon points="0 0, 10 3.5, 0 7" fill="green" />
                 </marker>
             </defs>
-            <path d="M500,500 Q600,550 700,600" style="stroke: green; stroke-width: 2px; marker-end: url(#arrowhead-3);"/>
+            <path d="M500,500 Q600,550 700,600"
+                style="stroke: green; stroke-width: 2px; marker-end: url(#arrowhead-3);" />
         </svg>
         <svg class="arrow arrow-green d-none" width="100%" height="100%">
             <defs>
                 <marker id="arrowhead-4" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto">
-                    <polygon points="0 0, 10 3.5, 0 7" fill="green"/>
+                    <polygon points="0 0, 10 3.5, 0 7" fill="green" />
                 </marker>
             </defs>
-            <path d="M500,500 Q600,550 700,600" style="stroke: green; stroke-width: 2px; marker-end: url(#arrowhead-4);"/>
+            <path d="M500,500 Q600,550 700,600"
+                style="stroke: green; stroke-width: 2px; marker-end: url(#arrowhead-4);" />
         </svg>
         <svg class="arrow arrow-green d-none" width="100%" height="100%">
             <defs>
                 <marker id="arrowhead-5" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto">
-                    <polygon points="0 0, 10 3.5, 0 7" fill="green"/>
+                    <polygon points="0 0, 10 3.5, 0 7" fill="green" />
                 </marker>
             </defs>
-            <path d="M500,500 Q600,550 700,600" style="stroke: green; stroke-width: 2px; marker-end: url(#arrowhead-5);"/>
+            <path d="M500,500 Q600,550 700,600"
+                style="stroke: green; stroke-width: 2px; marker-end: url(#arrowhead-5);" />
         </svg>
-        
+
         <!-- Red arrows -->
         <svg class="arrow arrow-red d-none" width="100%" height="100%">
             <defs>
                 <marker id="arrowhead-6" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto">
-                    <polygon points="0 0, 10 3.5, 0 7" fill="red"/>
+                    <polygon points="0 0, 10 3.5, 0 7" fill="red" />
                 </marker>
             </defs>
-            <path d="M500,500 Q600,550 700,600" style="stroke: red; stroke-width: 2px; marker-end: url(#arrowhead-6);"/>
+            <path d="M500,500 Q600,550 700,600"
+                style="stroke: red; stroke-width: 2px; marker-end: url(#arrowhead-6);" />
         </svg>
         <svg class="arrow arrow-red d-none" width="100%" height="100%">
             <defs>
                 <marker id="arrowhead-7" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto">
-                    <polygon points="0 0, 10 3.5, 0 7" fill="red"/>
+                    <polygon points="0 0, 10 3.5, 0 7" fill="red" />
                 </marker>
             </defs>
-            <path d="M500,500 Q600,550 700,600" style="stroke: red; stroke-width: 2px; marker-end: url(#arrowhead-7);"/>
+            <path d="M500,500 Q600,550 700,600"
+                style="stroke: red; stroke-width: 2px; marker-end: url(#arrowhead-7);" />
         </svg>
         <svg class="arrow arrow-red d-none" width="100%" height="100%">
             <defs>
                 <marker id="arrowhead-8" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto">
-                    <polygon points="0 0, 10 3.5, 0 7" fill="red"/>
+                    <polygon points="0 0, 10 3.5, 0 7" fill="red" />
                 </marker>
             </defs>
-            <path d="M500,500 Q600,550 700,600" style="stroke: red; stroke-width: 2px; marker-end: url(#arrowhead-8);"/>
+            <path d="M500,500 Q600,550 700,600"
+                style="stroke: red; stroke-width: 2px; marker-end: url(#arrowhead-8);" />
         </svg>
         <svg class="arrow arrow-red d-none" width="100%" height="100%">
             <defs>
                 <marker id="arrowhead-9" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto">
-                    <polygon points="0 0, 10 3.5, 0 7" fill="red"/>
+                    <polygon points="0 0, 10 3.5, 0 7" fill="red" />
                 </marker>
             </defs>
-            <path d="M500,500 Q600,550 700,600" style="stroke: red; stroke-width: 2px; marker-end: url(#arrowhead-9);"/>
+            <path d="M500,500 Q600,550 700,600"
+                style="stroke: red; stroke-width: 2px; marker-end: url(#arrowhead-9);" />
         </svg>
         <svg class="arrow arrow-red d-none" width="100%" height="100%">
             <defs>
                 <marker id="arrowhead-10" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto">
-                    <polygon points="0 0, 10 3.5, 0 7" fill="red"/>
+                    <polygon points="0 0, 10 3.5, 0 7" fill="red" />
                 </marker>
             </defs>
-            <path d="M500,500 Q600,550 700,600" style="stroke: red; stroke-width: 2px; marker-end: url(#arrowhead-10);"/>
+            <path d="M500,500 Q600,550 700,600"
+                style="stroke: red; stroke-width: 2px; marker-end: url(#arrowhead-10);" />
         </svg>
-        
+
         <svg class="arrow arrow-red d-none" width="100%" height="100%">
             <defs>
                 <marker id="arrowhead-21" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto">
-                    <polygon points="0 0, 10 3.5, 0 7" fill="red"/>
+                    <polygon points="0 0, 10 3.5, 0 7" fill="red" />
                 </marker>
             </defs>
-            <path d="M500,500 Q600,550 700,600" style="stroke: red; stroke-width: 2px; marker-end: url(#arrowhead-21);"/>
+            <path d="M500,500 Q600,550 700,600"
+                style="stroke: red; stroke-width: 2px; marker-end: url(#arrowhead-21);" />
         </svg>
         <svg class="arrow arrow-red d-none" width="100%" height="100%">
             <defs>
                 <marker id="arrowhead-22" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto">
-                    <polygon points="0 0, 10 3.5, 0 7" fill="red"/>
+                    <polygon points="0 0, 10 3.5, 0 7" fill="red" />
                 </marker>
             </defs>
-            <path d="M500,500 Q600,550 700,600" style="stroke: red; stroke-width: 2px; marker-end: url(#arrowhead-22);"/>
+            <path d="M500,500 Q600,550 700,600"
+                style="stroke: red; stroke-width: 2px; marker-end: url(#arrowhead-22);" />
         </svg>
         <svg class="arrow arrow-red d-none" width="100%" height="100%">
             <defs>
                 <marker id="arrowhead-23" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto">
-                    <polygon points="0 0, 10 3.5, 0 7" fill="red"/>
+                    <polygon points="0 0, 10 3.5, 0 7" fill="red" />
                 </marker>
             </defs>
-            <path d="M500,500 Q600,550 700,600" style="stroke: red; stroke-width: 2px; marker-end: url(#arrowhead-23);"/>
+            <path d="M500,500 Q600,550 700,600"
+                style="stroke: red; stroke-width: 2px; marker-end: url(#arrowhead-23);" />
         </svg>
         <svg class="arrow arrow-red d-none" width="100%" height="100%">
             <defs>
                 <marker id="arrowhead-24" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto">
-                    <polygon points="0 0, 10 3.5, 0 7" fill="red"/>
+                    <polygon points="0 0, 10 3.5, 0 7" fill="red" />
                 </marker>
             </defs>
-            <path d="M500,500 Q600,550 700,600" style="stroke: red; stroke-width: 2px; marker-end: url(#arrowhead-24);"/>
+            <path d="M500,500 Q600,550 700,600"
+                style="stroke: red; stroke-width: 2px; marker-end: url(#arrowhead-24);" />
         </svg>
         <svg class="arrow arrow-red d-none" width="100%" height="100%">
             <defs>
                 <marker id="arrowhead-25" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto">
-                    <polygon points="0 0, 10 3.5, 0 7" fill="red"/>
+                    <polygon points="0 0, 10 3.5, 0 7" fill="red" />
                 </marker>
             </defs>
-            <path d="M500,500 Q600,550 700,600" style="stroke: red; stroke-width: 2px; marker-end: url(#arrowhead-25);"/>
+            <path d="M500,500 Q600,550 700,600"
+                style="stroke: red; stroke-width: 2px; marker-end: url(#arrowhead-25);" />
         </svg>
-        
+
         <!-- Blue arrows -->
         <svg class="arrow arrow-blue d-none" width="100%" height="100%">
             <defs>
                 <marker id="arrowhead-11" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto">
-                    <polygon points="0 0, 10 3.5, 0 7" fill="blue"/>
+                    <polygon points="0 0, 10 3.5, 0 7" fill="blue" />
                 </marker>
             </defs>
-            <path d="M500,500 Q600,550 700,600" style="stroke: blue; stroke-width: 2px; marker-end: url(#arrowhead-11);"/>
+            <path d="M500,500 Q600,550 700,600"
+                style="stroke: blue; stroke-width: 2px; marker-end: url(#arrowhead-11);" />
         </svg>
         <svg class="arrow arrow-blue d-none" width="100%" height="100%">
             <defs>
                 <marker id="arrowhead-12" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto">
-                    <polygon points="0 0, 10 3.5, 0 7" fill="blue"/>
+                    <polygon points="0 0, 10 3.5, 0 7" fill="blue" />
                 </marker>
             </defs>
-            <path d="M500,500 Q600,550 700,600" style="stroke: blue; stroke-width: 2px; marker-end: url(#arrowhead-12);"/>
+            <path d="M500,500 Q600,550 700,600"
+                style="stroke: blue; stroke-width: 2px; marker-end: url(#arrowhead-12);" />
         </svg>
         <svg class="arrow arrow-blue d-none" width="100%" height="100%">
             <defs>
                 <marker id="arrowhead-13" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto">
-                    <polygon points="0 0, 10 3.5, 0 7" fill="blue"/>
+                    <polygon points="0 0, 10 3.5, 0 7" fill="blue" />
                 </marker>
             </defs>
-            <path d="M500,500 Q600,550 700,600" style="stroke: blue; stroke-width: 2px; marker-end: url(#arrowhead-13);"/>
+            <path d="M500,500 Q600,550 700,600"
+                style="stroke: blue; stroke-width: 2px; marker-end: url(#arrowhead-13);" />
         </svg>
         <svg class="arrow arrow-blue d-none" width="100%" height="100%">
             <defs>
                 <marker id="arrowhead-14" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto">
-                    <polygon points="0 0, 10 3.5, 0 7" fill="blue"/>
+                    <polygon points="0 0, 10 3.5, 0 7" fill="blue" />
                 </marker>
             </defs>
-            <path d="M500,500 Q600,550 700,600" style="stroke: blue; stroke-width: 2px; marker-end: url(#arrowhead-14);"/>
+            <path d="M500,500 Q600,550 700,600"
+                style="stroke: blue; stroke-width: 2px; marker-end: url(#arrowhead-14);" />
         </svg>
         <svg class="arrow arrow-blue d-none" width="100%" height="100%">
             <defs>
                 <marker id="arrowhead-15" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto">
-                    <polygon points="0 0, 10 3.5, 0 7" fill="blue"/>
+                    <polygon points="0 0, 10 3.5, 0 7" fill="blue" />
                 </marker>
             </defs>
-            <path d="M500,500 Q600,550 700,600" style="stroke: blue; stroke-width: 2px; marker-end: url(#arrowhead-15);"/>
+            <path d="M500,500 Q600,550 700,600"
+                style="stroke: blue; stroke-width: 2px; marker-end: url(#arrowhead-15);" />
         </svg>
-        
+
         <!-- Orange arrows -->
         <svg class="arrow arrow-orange d-none" width="100%" height="100%">
             <defs>
                 <marker id="arrowhead-16" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto">
-                    <polygon points="0 0, 10 3.5, 0 7" fill="orange"/>
+                    <polygon points="0 0, 10 3.5, 0 7" fill="orange" />
                 </marker>
             </defs>
-            <path d="M500,500 Q600,550 700,600" style="stroke: orange; stroke-width: 2px; marker-end: url(#arrowhead-16);"/>
+            <path d="M500,500 Q600,550 700,600"
+                style="stroke: orange; stroke-width: 2px; marker-end: url(#arrowhead-16);" />
         </svg>
         <svg class="arrow arrow-orange d-none" width="100%" height="100%">
             <defs>
                 <marker id="arrowhead-17" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto">
-                    <polygon points="0 0, 10 3.5, 0 7" fill="orange"/>
+                    <polygon points="0 0, 10 3.5, 0 7" fill="orange" />
                 </marker>
             </defs>
-            <path d="M500,500 Q600,550 700,600" style="stroke: orange; stroke-width: 2px; marker-end: url(#arrowhead-17);"/>
+            <path d="M500,500 Q600,550 700,600"
+                style="stroke: orange; stroke-width: 2px; marker-end: url(#arrowhead-17);" />
         </svg>
         <svg class="arrow arrow-orange d-none" width="100%" height="100%">
             <defs>
                 <marker id="arrowhead-18" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto">
-                    <polygon points="0 0, 10 3.5, 0 7" fill="orange"/>
+                    <polygon points="0 0, 10 3.5, 0 7" fill="orange" />
                 </marker>
             </defs>
-            <path d="M500,500 Q600,550 700,600" style="stroke: orange; stroke-width: 2px; marker-end: url(#arrowhead-18);"/>
+            <path d="M500,500 Q600,550 700,600"
+                style="stroke: orange; stroke-width: 2px; marker-end: url(#arrowhead-18);" />
         </svg>
         <svg class="arrow arrow-orange d-none" width="100%" height="100%">
             <defs>
                 <marker id="arrowhead-19" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto">
-                    <polygon points="0 0, 10 3.5, 0 7" fill="orange"/>
+                    <polygon points="0 0, 10 3.5, 0 7" fill="orange" />
                 </marker>
             </defs>
-            <path d="M500,500 Q600,550 700,600" style="stroke: orange; stroke-width: 2px; marker-end: url(#arrowhead-19);"/>
+            <path d="M500,500 Q600,550 700,600"
+                style="stroke: orange; stroke-width: 2px; marker-end: url(#arrowhead-19);" />
         </svg>
         <svg class="arrow arrow-orange d-none" width="100%" height="100%">
             <defs>
                 <marker id="arrowhead-20" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto">
-                    <polygon points="0 0, 10 3.5, 0 7" fill="orange"/>
+                    <polygon points="0 0, 10 3.5, 0 7" fill="orange" />
                 </marker>
             </defs>
-            <path d="M500,500 Q600,550 700,600" style="stroke: orange; stroke-width: 2px; marker-end: url(#arrowhead-20);"/>
+            <path d="M500,500 Q600,550 700,600"
+                style="stroke: orange; stroke-width: 2px; marker-end: url(#arrowhead-20);" />
         </svg>
 
         <!-- White arrows -->
         <svg class="arrow arrow-white d-none" width="100%" height="100%">
             <defs>
                 <marker id="arrowhead-26" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto">
-                    <polygon points="0 0, 10 3.5, 0 7" fill="white"/>
+                    <polygon points="0 0, 10 3.5, 0 7" fill="white" />
                 </marker>
             </defs>
-            <path d="M500,500 Q600,550 700,600" style="stroke: white; stroke-width: 2px; marker-end: url(#arrowhead-26);"/>
+            <path d="M500,500 Q600,550 700,600"
+                style="stroke: white; stroke-width: 2px; marker-end: url(#arrowhead-26);" />
         </svg>
 
         <svg class="arrow arrow-white d-none" width="100%" height="100%">
             <defs>
                 <marker id="arrowhead-27" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto">
-                    <polygon points="0 0, 10 3.5, 0 7" fill="white"/>
+                    <polygon points="0 0, 10 3.5, 0 7" fill="white" />
                 </marker>
             </defs>
-            <path d="M500,500 Q600,550 700,600" style="stroke: white; stroke-width: 2px; marker-end: url(#arrowhead-27);"/>
+            <path d="M500,500 Q600,550 700,600"
+                style="stroke: white; stroke-width: 2px; marker-end: url(#arrowhead-27);" />
         </svg>
-        
+
         <svg class="arrow arrow-white d-none" width="100%" height="100%">
             <defs>
                 <marker id="arrowhead-28" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto">
-                    <polygon points="0 0, 10 3.5, 0 7" fill="white"/>
+                    <polygon points="0 0, 10 3.5, 0 7" fill="white" />
                 </marker>
             </defs>
-            <path d="M500,500 Q600,550 700,600" style="stroke: white; stroke-width: 2px; marker-end: url(#arrowhead-28);"/>
+            <path d="M500,500 Q600,550 700,600"
+                style="stroke: white; stroke-width: 2px; marker-end: url(#arrowhead-28);" />
         </svg>
-        
+
         <svg class="arrow arrow-white d-none" width="100%" height="100%">
             <defs>
                 <marker id="arrowhead-29" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto">
-                    <polygon points="0 0, 10 3.5, 0 7" fill="white"/>
+                    <polygon points="0 0, 10 3.5, 0 7" fill="white" />
                 </marker>
             </defs>
-            <path d="M500,500 Q600,550 700,600" style="stroke: white; stroke-width: 2px; marker-end: url(#arrowhead-29);"/>
+            <path d="M500,500 Q600,550 700,600"
+                style="stroke: white; stroke-width: 2px; marker-end: url(#arrowhead-29);" />
         </svg>
-        
+
         <svg class="arrow arrow-white d-none" width="100%" height="100%">
             <defs>
                 <marker id="arrowhead-30" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto">
-                    <polygon points="0 0, 10 3.5, 0 7" fill="white"/>
+                    <polygon points="0 0, 10 3.5, 0 7" fill="white" />
                 </marker>
             </defs>
-            <path d="M500,500 Q600,550 700,600" style="stroke: white; stroke-width: 2px; marker-end: url(#arrowhead-30);"/>
+            <path d="M500,500 Q600,550 700,600"
+                style="stroke: white; stroke-width: 2px; marker-end: url(#arrowhead-30);" />
         </svg>
-        
+
         <svg class="arrow arrow-white d-none" width="100%" height="100%">
             <defs>
                 <marker id="arrowhead-31" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto">
-                    <polygon points="0 0, 10 3.5, 0 7" fill="white"/>
+                    <polygon points="0 0, 10 3.5, 0 7" fill="white" />
                 </marker>
             </defs>
-            <path d="M500,500 Q600,550 700,600" style="stroke: white; stroke-width: 2px; marker-end: url(#arrowhead-31);"/>
+            <path d="M500,500 Q600,550 700,600"
+                style="stroke: white; stroke-width: 2px; marker-end: url(#arrowhead-31);" />
         </svg>
-        
+
         <svg class="arrow arrow-white d-none" width="100%" height="100%">
             <defs>
                 <marker id="arrowhead-32" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto">
-                    <polygon points="0 0, 10 3.5, 0 7" fill="white"/>
+                    <polygon points="0 0, 10 3.5, 0 7" fill="white" />
                 </marker>
             </defs>
-            <path d="M500,500 Q600,550 700,600" style="stroke: white; stroke-width: 2px; marker-end: url(#arrowhead-32);"/>
+            <path d="M500,500 Q600,550 700,600"
+                style="stroke: white; stroke-width: 2px; marker-end: url(#arrowhead-32);" />
         </svg>
-        
+
         <svg class="arrow arrow-white d-none" width="100%" height="100%">
             <defs>
                 <marker id="arrowhead-33" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto">
-                    <polygon points="0 0, 10 3.5, 0 7" fill="white"/>
+                    <polygon points="0 0, 10 3.5, 0 7" fill="white" />
                 </marker>
             </defs>
-            <path d="M500,500 Q600,550 700,600" style="stroke: white; stroke-width: 2px; marker-end: url(#arrowhead-33);"/>
+            <path d="M500,500 Q600,550 700,600"
+                style="stroke: white; stroke-width: 2px; marker-end: url(#arrowhead-33);" />
         </svg>
-        
+
         <svg class="arrow arrow-white d-none" width="100%" height="100%">
             <defs>
                 <marker id="arrowhead-34" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto">
-                    <polygon points="0 0, 10 3.5, 0 7" fill="white"/>
+                    <polygon points="0 0, 10 3.5, 0 7" fill="white" />
                 </marker>
             </defs>
-            <path d="M500,500 Q600,550 700,600" style="stroke: white; stroke-width: 2px; marker-end: url(#arrowhead-34);"/>
+            <path d="M500,500 Q600,550 700,600"
+                style="stroke: white; stroke-width: 2px; marker-end: url(#arrowhead-34);" />
         </svg>
-        
+
         <svg class="arrow arrow-white d-none" width="100%" height="100%">
             <defs>
                 <marker id="arrowhead-35" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto">
-                    <polygon points="0 0, 10 3.5, 0 7" fill="white"/>
+                    <polygon points="0 0, 10 3.5, 0 7" fill="white" />
                 </marker>
             </defs>
-            <path d="M500,500 Q600,550 700,600" style="stroke: white; stroke-width: 2px; marker-end: url(#arrowhead-35);"/>
-        </svg>        
+            <path d="M500,500 Q600,550 700,600"
+                style="stroke: white; stroke-width: 2px; marker-end: url(#arrowhead-35);" />
+        </svg>
+
+        <!-- Yellow arrows -->
+        <svg class="arrow arrow-yellow d-none" width="100%" height="100%">
+            <defs>
+                <marker id="arrowhead-36" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto">
+                    <polygon points="0 0, 10 3.5, 0 7" fill="yellow" />
+                </marker>
+            </defs>
+            <path d="M500,500 Q600,550 700,600"
+                style="stroke: yellow; stroke-width: 2px; marker-end: url(#arrowhead-36);" />
+        </svg>
+        <svg class="arrow arrow-yellow d-none" width="100%" height="100%">
+            <defs>
+                <marker id="arrowhead-37" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto">
+                    <polygon points="0 0, 10 3.5, 0 7" fill="yellow" />
+                </marker>
+            </defs>
+            <path d="M500,500 Q600,550 700,600"
+                style="stroke: yellow; stroke-width: 2px; marker-end: url(#arrowhead-37);" />
+        </svg>
+        <svg class="arrow arrow-yellow d-none" width="100%" height="100%">
+            <defs>
+                <marker id="arrowhead-38" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto">
+                    <polygon points="0 0, 10 3.5, 0 7" fill="yellow" />
+                </marker>
+            </defs>
+            <path d="M500,500 Q600,550 700,600"
+                style="stroke: yellow; stroke-width: 2px; marker-end: url(#arrowhead-38);" />
+        </svg>
+        <svg class="arrow arrow-yellow d-none" width="100%" height="100%">
+            <defs>
+                <marker id="arrowhead-39" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto">
+                    <polygon points="0 0, 10 3.5, 0 7" fill="yellow" />
+                </marker>
+            </defs>
+            <path d="M500,500 Q600,550 700,600"
+                style="stroke: yellow; stroke-width: 2px; marker-end: url(#arrowhead-39);" />
+        </svg>
+        <svg class="arrow arrow-yellow d-none" width="100%" height="100%">
+            <defs>
+                <marker id="arrowhead-40" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto">
+                    <polygon points="0 0, 10 3.5, 0 7" fill="yellow" />
+                </marker>
+            </defs>
+            <path d="M500,500 Q600,550 700,600"
+                style="stroke: yellow; stroke-width: 2px; marker-end: url(#arrowhead-40);" />
+        </svg>
+        <svg class="arrow arrow-yellow d-none" width="100%" height="100%">
+            <defs>
+                <marker id="arrowhead-41" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto">
+                    <polygon points="0 0, 10 3.5, 0 7" fill="yellow" />
+                </marker>
+            </defs>
+            <path d="M500,500 Q600,550 700,600"
+                style="stroke: yellow; stroke-width: 2px; marker-end: url(#arrowhead-41);" />
+        </svg>
+        <svg class="arrow arrow-yellow d-none" width="100%" height="100%">
+            <defs>
+                <marker id="arrowhead-42" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto">
+                    <polygon points="0 0, 10 3.5, 0 7" fill="yellow" />
+                </marker>
+            </defs>
+            <path d="M500,500 Q600,550 700,600"
+                style="stroke: yellow; stroke-width: 2px; marker-end: url(#arrowhead-42);" />
+        </svg>
+        <svg class="arrow arrow-yellow d-none" width="100%" height="100%">
+            <defs>
+                <marker id="arrowhead-43" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto">
+                    <polygon points="0 0, 10 3.5, 0 7" fill="yellow" />
+                </marker>
+            </defs>
+            <path d="M500,500 Q600,550 700,600"
+                style="stroke: yellow; stroke-width: 2px; marker-end: url(#arrowhead-43);" />
+        </svg>
+        <svg class="arrow arrow-yellow d-none" width="100%" height="100%">
+            <defs>
+                <marker id="arrowhead-44" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto">
+                    <polygon points="0 0, 10 3.5, 0 7" fill="yellow" />
+                </marker>
+            </defs>
+            <path d="M500,500 Q600,550 700,600"
+                style="stroke: yellow; stroke-width: 2px; marker-end: url(#arrowhead-44);" />
+        </svg>
+        <svg class="arrow arrow-yellow d-none" width="100%" height="100%">
+            <defs>
+                <marker id="arrowhead-45" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto">
+                    <polygon points="0 0, 10 3.5, 0 7" fill="yellow" />
+                </marker>
+            </defs>
+            <path d="M500,500 Q600,550 700,600"
+                style="stroke: yellow; stroke-width: 2px; marker-end: url(#arrowhead-45);" />
+        </svg>
+
+        <!-- Purple arrows -->
+        <svg class="arrow arrow-purple d-none" width="100%" height="100%">
+            <defs>
+                <marker id="arrowhead-46" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto">
+                    <polygon points="0 0, 10 3.5, 0 7" fill="purple" />
+                </marker>
+            </defs>
+            <path d="M500,500 Q600,550 700,600"
+                style="stroke: purple; stroke-width: 2px; marker-end: url(#arrowhead-46);" />
+        </svg>
+
+        <svg class="arrow arrow-purple d-none" width="100%" height="100%">
+            <defs>
+                <marker id="arrowhead-47" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto">
+                    <polygon points="0 0, 10 3.5, 0 7" fill="purple" />
+                </marker>
+            </defs>
+            <path d="M500,500 Q600,550 700,600"
+                style="stroke: purple; stroke-width: 2px; marker-end: url(#arrowhead-47);" />
+        </svg>
+
+        <svg class="arrow arrow-purple d-none" width="100%" height="100%">
+            <defs>
+                <marker id="arrowhead-48" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto">
+                    <polygon points="0 0, 10 3.5, 0 7" fill="purple" />
+                </marker>
+            </defs>
+            <path d="M500,500 Q600,550 700,600"
+                style="stroke: purple; stroke-width: 2px; marker-end: url(#arrowhead-48);" />
+        </svg>
+
+        <svg class="arrow arrow-purple d-none" width="100%" height="100%">
+            <defs>
+                <marker id="arrowhead-49" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto">
+                    <polygon points="0 0, 10 3.5, 0 7" fill="purple" />
+                </marker>
+            </defs>
+            <path d="M500,500 Q600,550 700,600"
+                style="stroke: purple; stroke-width: 2px; marker-end: url(#arrowhead-49);" />
+        </svg>
+
+        <svg class="arrow arrow-purple d-none" width="100%" height="100%">
+            <defs>
+                <marker id="arrowhead-50" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto">
+                    <polygon points="0 0, 10 3.5, 0 7" fill="purple" />
+                </marker>
+            </defs>
+            <path d="M500,500 Q600,550 700,600"
+                style="stroke: purple; stroke-width: 2px; marker-end: url(#arrowhead-50);" />
+        </svg>
+
+        <svg class="arrow arrow-purple d-none" width="100%" height="100%">
+            <defs>
+                <marker id="arrowhead-51" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto">
+                    <polygon points="0 0, 10 3.5, 0 7" fill="purple" />
+                </marker>
+            </defs>
+            <path d="M500,500 Q600,550 700,600"
+                style="stroke: purple; stroke-width: 2px; marker-end: url(#arrowhead-51);" />
+        </svg>
+        <svg class="arrow arrow-purple d-none" width="100%" height="100%">
+            <defs>
+                <marker id="arrowhead-52" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto">
+                    <polygon points="0 0, 10 3.5, 0 7" fill="purple" />
+                </marker>
+            </defs>
+            <path d="M500,500 Q600,550 700,600"
+                style="stroke: purple; stroke-width: 2px; marker-end: url(#arrowhead-52);" />
+        </svg>
+
+        <svg class="arrow arrow-purple d-none" width="100%" height="100%">
+            <defs>
+                <marker id="arrowhead-53" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto">
+                    <polygon points="0 0, 10 3.5, 0 7" fill="purple" />
+                </marker>
+            </defs>
+            <path d="M500,500 Q600,550 700,600"
+                style="stroke: purple; stroke-width: 2px; marker-end: url(#arrowhead-53);" />
+        </svg>
+
+        <svg class="arrow arrow-purple d-none" width="100%" height="100%">
+            <defs>
+                <marker id="arrowhead-54" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto">
+                    <polygon points="0 0, 10 3.5, 0 7" fill="purple" />
+                </marker>
+            </defs>
+            <path d="M500,500 Q600,550 700,600"
+                style="stroke: purple; stroke-width: 2px; marker-end: url(#arrowhead-54);" />
+        </svg>
+
+        <svg class="arrow arrow-purple d-none" width="100%" height="100%">
+            <defs>
+                <marker id="arrowhead-55" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto">
+                    <polygon points="0 0, 10 3.5, 0 7" fill="purple" />
+                </marker>
+            </defs>
+            <path d="M500,500 Q600,550 700,600"
+                style="stroke: purple; stroke-width: 2px; marker-end: url(#arrowhead-55);" />
+        </svg>
 
     </div>
-    
+
     <script>
         // Check if currently in mobile mode
         const isMobile = window.matchMedia("only screen and (max-width: 950px)").matches;
@@ -434,6 +663,7 @@
                 modal.style.display = "none";
             }
         }
+
     </script>
     <script src="lib/jquery/jquery-3.2.1.min.js"></script>
     <script src="lib/chessboardjs/js/chess.js"></script>

@@ -29,12 +29,33 @@ $(document).ready(function() {
             $('#move-suggestion-title, #move-suggestion, #arrow-container').addClass('d-none');
         }
     });
+    $('#checkbox-plan-arrow').change(function() {
+        if ($(this).is(':checked')) {
+            $('#arrow-container svg.arrow-yellow').removeClass('force-d-none');
+            $('#arrow-container svg.arrow-purple').removeClass('force-d-none');
+        } else {
+            $('#arrow-container svg.arrow-yellow').addClass('force-d-none');
+            $('#arrow-container svg.arrow-purple').addClass('force-d-none');
+        }
+    });
     
     $('#language').change(function() {
         window.setTimeout(async () => {
             let sugestion = await generateSuggestion(game);
             renderSuggestion(sugestion);
         }, 200);
+    });
+    
+
+    // Set opacity for yellow arrow. Lower opacity for farther moving plan
+    $('.arrow.arrow-yellow').each(function(index) {
+        const opacity = 0.8 - (index / ($('.arrow.arrow-yellow').length - 1));
+        $(this).css('opacity', opacity);
+    });
+    // Set opacity for purple arrow. Lower opacity for farther moving plan
+    $('.arrow.arrow-purple').each(function(index) {
+        const opacity = 0.8 - (index / ($('.arrow.arrow-purple').length - 1));
+        $(this).css('opacity', opacity);
     });
 });
 
@@ -292,7 +313,21 @@ async function generateSuggestion(game) {
     // Normalization Commentaries into suggestions
     suggestion.shift();
     suggestion.push("");
-    suggestion.push(localize("Continuation") + ": " + suggestionStockfish.continuation);
+    let strArrowContinuation = "";
+    let lsContinuation = suggestionStockfish.continuation.split(" ");
+    lsContinuation.forEach((move, index) => {
+        if (index % 2 === 0 && index > 0) { // our moves
+            let startPos = move.substring(0, 2);
+            let endPos = move.substring(move.length - 2);
+            strArrowContinuation += generateArrowData(startPos, endPos, ARROW_COLOR.YELLOW);
+        }
+        else if (index % 2 === 1 && index > 0) { // enemy moves
+            let startPos = move.substring(0, 2);
+            let endPos = move.substring(move.length - 2);
+            strArrowContinuation += generateArrowData(startPos, endPos, ARROW_COLOR.PURPLE);
+        }
+    });
+    suggestion.push(localize("Continuation") + ": " + suggestionStockfish.continuation + strArrowContinuation);
     suggestion.push("");
     suggestion.push(generateEvaluationComment(suggestionStockfish.evaluation));
 
@@ -1099,6 +1134,8 @@ let ARROW_COLOR = {
     BLUE: "blue",
     ORANGE: "orange",
     WHITE: "white",
+    YELLOW: "yellow",
+    PURPLE: "purple",
 };
 
 function generateArrowData(fromCell, toCell, color) {
