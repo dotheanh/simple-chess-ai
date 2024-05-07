@@ -318,12 +318,12 @@ async function generateSuggestion(game) {
     lsContinuation.forEach((move, index) => {
         if (index % 2 === 0 && index > 0) { // our moves
             let startPos = move.substring(0, 2);
-            let endPos = move.substring(move.length - 2);
+            let endPos = move.substring(2, 4);
             strArrowContinuation += generateArrowData(startPos, endPos, ARROW_COLOR.YELLOW);
         }
         else if (index % 2 === 1 && index > 0) { // enemy moves
             let startPos = move.substring(0, 2);
-            let endPos = move.substring(move.length - 2);
+            let endPos = move.substring(2, 4);
             strArrowContinuation += generateArrowData(startPos, endPos, ARROW_COLOR.PURPLE);
         }
     });
