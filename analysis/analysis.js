@@ -1,13 +1,11 @@
 const chess = require('chess.js');
 const stockfish = require('stockfish');
-const fs = require('fs');
-const readline = require('readline');
 
 const engine = stockfish();
 
 const STOCKFISH_CONFIG = { time: 0.25 };
 
-const openings_df = fs.readFileSync('openings_master.csv', 'utf8');
+// const openings_df = fs.readFileSync('openings_master.csv', 'utf8');
 // only 2 openings have more than 12 moves
 
 function search_opening(dataframe, pgn) {
@@ -1231,11 +1229,12 @@ function review_move(board, move, previous_review, check_if_opening) {
     var review = '';
     var best_move = get_best_move(board);
     if (check_if_opening) {
-        var opening = search_opening(openings_df, get_board_pgn(position_after_move));
-        if (opening != null) {
-            review = "This is a book move. The opening is called " + opening + ". ";
-            return ['book', review, best_move, board.san(best_move)];
-        }
+        // TODO: TA Check if opening
+        // var opening = search_opening(openings_df, get_board_pgn(position_after_move));
+        // if (opening != null) {
+        //     review = "This is a book move. The opening is called " + opening + ". ";
+        //     return ['book', review, best_move, board.san(best_move)];
+        // }
     }
     var move_classication = classify_move(board, move);
     if (move_classication == 'excellent' || move_classication == 'good') {
@@ -1461,7 +1460,10 @@ function get_board_pgn(board) {
     return game.mainline_moves().toString();
 }
 
-function review_game(uci_moves, roast, verbose) {
+
+// uci_moves, san_moves, fens = chess_review.parse_pgn(pgn_data)
+
+function review_game(uci_moves, verbose) {
     var board = chess.Board();
     var san_best_moves = [];
     var uci_best_moves = [];
