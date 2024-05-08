@@ -513,6 +513,8 @@ function generateCommentaries(gameBeforeMove, uglyMove) {
     if (gameAfterMove.game_over()) {
         commentaries.push(`${localize('GAME OVER')}`);
     }
+
+    getAnalysisFromServer(gameAfterMove.pgn());
     
     gameAfterMove.undo(); // although I have cloned the gameBeforeMove object, the method move still
     // affects the original object, so we need to revert it here
@@ -655,6 +657,39 @@ var getBestMoveFromStockfish = async function (game) {
     }
 };
 
+function getAnalysisFromServer(pgn) {
+    const limits = "time";
+    const timeLimit = "0.05";
+    const depthLimit = "1";
+
+    // Prepare form data
+    var formData = new FormData();
+    formData.append('pgn', pgn);
+    formData.append('limits', limits);
+    formData.append('time-limit', timeLimit);
+    formData.append('depth-limit', depthLimit);
+
+    // Make POST request
+    fetch('http://127.0.0.1:8000/views/analysis', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.json();
+    })
+    .then(data => {
+        // Handle response data
+        console.log('Analysis data:', data);
+        // Do something with the response data
+    })
+    .catch(error => {
+        // Handle errors
+        console.error('There was a problem with the fetch operation:', error);
+    });
+}
 
 
 var renderMoveHistory = function (moves) {
