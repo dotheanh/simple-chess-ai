@@ -1,2 +1,7 @@
 .idea
 node_modules
+
+# Ignore Python bytecode files
+__pycache__/
+*.pyc
+*.pyo
