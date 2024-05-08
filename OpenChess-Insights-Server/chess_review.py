@@ -1,8 +1,8 @@
 import chess.engine  
 from IPython.display import clear_output
 import pandas as pd
+import numpy as np
 import chess.pgn
-from collections import Counter # for calculating captured pieces
 import math
 import io
 from tqdm import tqdm
@@ -26,18 +26,6 @@ def search_opening(dataframe, pgn):
     else:
         return None
 
-
-def check_for_defended_pieces(board):
-    for hanging_square in chess.SQUARES:
-        maybe_hanging_piece = board.piece_at(hanging_square)
-        if maybe_hanging_piece is not None:
-
-            for defending_square in chess.SQUARES: # see if attacked piece has defenders
-                maybe_defending_piece = board.piece_at(defending_square)
-                if (maybe_defending_piece is not None) and (maybe_hanging_piece.color == maybe_defending_piece.color):
-
-                    if hanging_square in list(board.attacks(defending_square)): # check if attacked piece's square is on the attacks (is defended by) of another piece
-                        print(f'{board.piece_at(hanging_square)} is defended by the {board.piece_at(defending_square)}')
 
 def is_defended(board: chess.Board, square, by_color=None, return_list_of_defenders=False):
 
@@ -302,21 +290,6 @@ def evaluate(board, return_mate_n=False):
     else:
         return score
 
-def evaluate_relative(board):
-    with chess.engine.SimpleEngine.popen_uci(stockfish_path) as engine:
-        info = engine.analyse(board, chess.engine.Limit(**STOCKFISH_CONFIG))
-
-    possible_mate_score = str(info['score'].relative)
-    if '#' in possible_mate_score:
-        if '+' in possible_mate_score:
-            return 10000
-        else:
-            return -10000
-
-    # handle error if score is none when mate in n
-    score = info['score'].relative.score()
-    return score
-
 
 def has_mate_in_n(board):
     with chess.engine.SimpleEngine.popen_uci(stockfish_path) as engine:
@@ -326,30 +299,6 @@ def has_mate_in_n(board):
             return True
         else:
             return False
-
-def move_allows_mate(board: chess.Board, move, return_winning_player=False):
-    #move = board.parse_san(move)
-    position_after_move = board.copy()
-    position_after_move.push(move)
-
-    with chess.engine.SimpleEngine.popen_uci(stockfish_path) as engine:
-        info = engine.analyse(position_after_move, chess.engine.Limit(**STOCKFISH_CONFIG))
-
-    score = str(info['score'].relative)
-
-    if return_winning_player:
-        if '#' not in score:
-            return None
-        else:
-            if '+' in score:
-                return not board.turn
-            elif '-' in score:
-                return board.turn
-
-    if '#' not in score:
-        return False
-    else:
-        return True
 
 def calculate_points_gained_by_move(board: chess.Board, move, **kwargs):
     previous_score = evaluate(board)
@@ -421,30 +370,6 @@ def classify_move(board: chess.Board, move):
     else:
         return 'blunder'
 
-def rank_moves(board: chess.Board, return_dict=False):
-    # ascending order
-    
-    scores = []
-    moves = [] # best to worst
-
-    for move in board.legal_moves:
-
-        position_after_move = board.copy()
-        position_after_move.push(move)
-
-        score = evaluate(position_after_move)
-        
-        moves.append(move)
-        scores.append(score)
-
-    moves = [m for _, m in sorted(zip(scores, moves))]
-    scores = sorted(scores)
-
-    if return_dict:
-        return {m: s for m, s in zip(moves, scores)}
-    else:
-        return moves
-
 
 def is_developing_move(board: chess.Board, move):
     #move = board.parse_san(move)
@@ -481,42 +406,6 @@ def is_fianchetto(board: chess.Board, move):
                 return True
         
     return False
-
-def check_for_threats(board: chess.Board, moves_ahead=2, take_turns=False, by_opponent=True):
-
-    assert not board.is_check()
-
-    threat_moves = []
-
-    opponent_color = not board.turn
-    
-    if take_turns:
-        with chess.engine.SimpleEngine.popen_uci(stockfish_path) as engine:
-            info = engine.analyse(board, chess.engine.Limit(**STOCKFISH_CONFIG))
-
-        threat_moves = info['pv'][:moves_ahead]
-
-    else:
-
-        experiment_board = board.copy()
-        for i in range(moves_ahead):
-            experiment_board = chess.Board(experiment_board.fen())
-            if by_opponent:
-                experiment_board.turn = opponent_color
-            else:
-                experiment_board.turn = not opponent_color
-            with chess.engine.SimpleEngine.popen_uci(stockfish_path) as engine:
-                info = engine.analyse(experiment_board, chess.engine.Limit(**STOCKFISH_CONFIG))
-            
-            best_move = info['pv'][0]
-            threat_moves.append(best_move)
-            experiment_board.push(best_move)
-
-            if experiment_board.is_check():
-                break
-
-
-    return threat_moves
 
 def is_possible_trade(board: chess.Board, move):
     #move = board.parse_san(move)
@@ -834,21 +723,6 @@ def moves_rook_to_open_file(board: chess.Board, move):
     
     return False
 
-def is_an_opening(game: str, return_name_and_desc=True):
-    opening = openings_df[openings_df['Moves'] == game]
-    
-    if return_name_and_desc:
-        if opening.empty:
-                return None, None
-        else:
-            return (opening['Name'].iloc[0], opening['Description'].iloc[0])
-    else:
-        if opening.empty:
-            return False
-        else:
-            return True
-
-
 def is_endgame(board: chess.Board):
     major_pieces = 0
     fen = board.fen()
@@ -1045,24 +919,6 @@ def get_best_sequence(board: chess.Board):
 
     best_move = info['pv']
     return best_move
-
-def get_lost_pieces(board: chess.Board):
-
-    default_pieces_white = ['P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'Q', 'K', 'N', 'B', 'R']
-    counter_default_white = Counter(default_pieces_white)
-    default_pieces_black = [p.upper() for p in default_pieces_white]
-    counter_default_black = Counter(default_pieces_black)
-
-    pieces = [str(p) for p in list(board.piece_map().values)]
-
-    white_piece_list = [p for p in pieces if p.isupper()]
-    black_piece_list = [p for p in pieces if p.islower()]
-
-    counter_white = Counter(white_piece_list)
-    counter_black = Counter(black_piece_list)
-
-    lost_white_pieces = list((counter_default_white - counter_white).elements())
-    lost_black_pieces = list((counter_default_black - counter_black).elements())
 
 def mate_in_n_for(board):
     with chess.engine.SimpleEngine.popen_uci(stockfish_path) as engine:
