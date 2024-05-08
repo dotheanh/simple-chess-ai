@@ -1,9 +1,11 @@
 from flask import Blueprint, render_template, request, jsonify
+from flask_cors import CORS
 import os
 import chess_review
 import json
 
 views = Blueprint(__name__, "views")
+CORS(views)
 
 @views.route("/")
 def home():
