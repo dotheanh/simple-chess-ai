@@ -1215,7 +1215,7 @@ def review_move(board: chess.Board, move, previous_review: str, check_if_opening
         if move_wins_tempo(board, move):
             review += 'This move gains a tempo. '
 
-        if 'trade' not in previous_review:
+        if (previous_review is not None) and ('trade' not in previous_review):
 
             if move_captures_higher_piece(board, move):
                 review += f'This captures a higher value piece. '
@@ -1253,7 +1253,7 @@ def review_move(board: chess.Board, move, previous_review: str, check_if_opening
         review += f'{board.san(move)} is {move_classication}. '
 
         possible_hanging_squares = []
-        if ('creates a fork' not in previous_review) or (not board.is_check()) or ('trade' not in previous_review) or ('lower value' not in previous_review):
+        if (previous_review is not None) and (('creates a fork' not in previous_review) or (not board.is_check()) or ('trade' not in previous_review) or ('lower value' not in previous_review)):
             possible_hanging_squares = move_hangs_piece(board, move, return_hanging_squares=True)
 
             if is_possible_trade(board, move):
@@ -1355,7 +1355,7 @@ def review_move(board: chess.Board, move, previous_review: str, check_if_opening
         review += f"This loses the checkmate sequence. The opponent can play {position_after_move.san(lets_opponent_play_move)}. "
         move_classication = 'blunder'
 
-    elif 'mates' in move_classication:
+    elif (previous_review is not None) and ('mates' in move_classication):
         n = previous_review[-2] # ex. "White gets mated in 6." we need the number 6
         if n.isdigit(): # means that player is continuing checkmate sequence
 
