@@ -513,11 +513,12 @@ function generateCommentaries(gameBeforeMove, uglyMove) {
     if (gameAfterMove.game_over()) {
         commentaries.push(`${localize('GAME OVER')}`);
     }
-
-    getAnalysisFromServer(gameAfterMove.pgn());
     
     gameAfterMove.undo(); // although I have cloned the gameBeforeMove object, the method move still
     // affects the original object, so we need to revert it here
+
+    // getAnalysisFromServer(gameBeforeMove, gameBeforeMove.move_to_san(uglyMove));
+    // reviewMove(gameBeforeMove, uglyMove);
 
     return commentaries;
 };
