@@ -1403,6 +1403,9 @@ def review_game(uci_moves, roast=False, verbose=False):
 
 
     for i, move in enumerate(tqdm(uci_moves)):
+        if i < len(uci_moves) - 1:  # Check if the move is not the last move
+            board.push(move)
+            continue  # Skip reviewing the move
 
         if i < 11:
             check_if_opening = True
